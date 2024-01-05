@@ -185,7 +185,6 @@ const Message = () => {
       </div>
       <div className={styles['message-card-container']}>
         <div className={styles['message-card']}>
-        <AvatarPicker onSelect={(selectedAvatar) => setSelectedAvatar(selectedAvatar)} />
           <MessageList
             messages={messages}
             deleteMessage={deleteMessage}
