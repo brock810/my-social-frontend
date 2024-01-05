@@ -4,7 +4,6 @@ import AvatarPicker from './AvatarPicker';
 import MessageInput from './MessageInput';
 
 const isBrowser = typeof window !== 'undefined';
-const WebSocket = isBrowser ? require('websocket').w3cwebsocket : null;
 
 const MessageItem = ({ message, deleteMessage, formatTimestamp, selectedAvatar }) => (
   <li key={message._id} className={styles['chat-bubble']}>
@@ -39,7 +38,7 @@ const MessageList = ({ messages, deleteMessage, formatTimestamp, selectedAvatar 
           message={message}
           deleteMessage={deleteMessage}
           formatTimestamp={formatTimestamp}
-          selectedAvatar={selectedAvatar} 
+          selectedAvatar={selectedAvatar}
         />
       ))}
     </ul>
@@ -53,7 +52,6 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
   const [senderName, setSenderName] = useState('');
-  const [socket, setSocket] = useState(null);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -79,31 +77,12 @@ const Message = () => {
   };
 
   const saveMessagesToLocalStorage = (messages) => {
-    localStorage.setItem('chatMessages', JSON.stringify(messages));
+    isBrowser && localStorage.setItem('chatMessages', JSON.stringify(messages));
   };
 
   const getMessagesFromLocalStorage = () => {
-    const storedMessages = localStorage.getItem('chatMessages');
+    const storedMessages = isBrowser ? localStorage.getItem('chatMessages') : null;
     return storedMessages ? JSON.parse(storedMessages) : [];
-  };
-
-  const initWebSocket = () => {
-    const newSocket = new WebSocket('ws://localhost:3001'); 
-
-    newSocket.addEventListener('open', (event) => {
-      console.log('WebSocket Connection Established');
-    });
-
-    newSocket.addEventListener('message', (event) => {
-      console.log('Message from server:', event.data);
-      setMessages((prevMessages) => [...prevMessages, JSON.parse(event.data)]);
-    });
-
-    newSocket.addEventListener('close', (event) => {
-      console.log('Server closed the connection', event);
-    });
-
-    return newSocket;
   };
 
   const sendMessage = async () => {
@@ -127,7 +106,6 @@ const Message = () => {
         saveMessagesToLocalStorage([...messages, result.message]);
         setNewMessage('');
         setSenderName('');
-        socket.send(JSON.stringify(result.message)); 
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -151,7 +129,6 @@ const Message = () => {
 
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
-        socket.send(JSON.stringify({ deleted: true, _id: id })); 
       } else {
         console.error('Error deleting message:', result.error);
       }
@@ -167,15 +144,7 @@ const Message = () => {
     } else {
       fetchMessages();
     }
-
-    setSocket(initWebSocket());
-
-    return () => {
-      if (socket) {
-        socket.close();
-      }
-    };
-  }, [socket]);
+  }, []);
 
   return (
     <div className={styles['message-container']}>
@@ -185,6 +154,7 @@ const Message = () => {
       </div>
       <div className={styles['message-card-container']}>
         <div className={styles['message-card']}>
+          <AvatarPicker onSelect={(selectedAvatar) => setSelectedAvatar(selectedAvatar)} />
           <MessageList
             messages={messages}
             deleteMessage={deleteMessage}
