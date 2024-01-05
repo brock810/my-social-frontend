@@ -68,7 +68,7 @@ const Message = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/getMessage');
+      const response = await fetch('http://localhost:1988/api/getMessage');
       const result = await response.json();
       if (Array.isArray(result)) {
         setMessages(result);
@@ -87,24 +87,7 @@ const Message = () => {
     return storedMessages ? JSON.parse(storedMessages) : [];
   };
 
-  const initWebSocket = () => {
-    const newSocket = new WebSocket('ws://localhost:3001'); 
 
-    newSocket.addEventListener('open', (event) => {
-      console.log('WebSocket Connection Established');
-    });
-
-    newSocket.addEventListener('message', (event) => {
-      console.log('Message from server:', event.data);
-      setMessages((prevMessages) => [...prevMessages, JSON.parse(event.data)]);
-    });
-
-    newSocket.addEventListener('close', (event) => {
-      console.log('Server closed the connection', event);
-    });
-
-    return newSocket;
-  };
 
   const sendMessage = async () => {
     try {
@@ -113,7 +96,7 @@ const Message = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:3001/api/sendMessage', {
+      const response = await fetch('http://localhost:1988/api/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,7 +119,7 @@ const Message = () => {
 
   const deleteMessage = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/deleteMessage/${id}`, {
+      const response = await fetch(`http://localhost:1988/api/deleteMessage/${id}`, {
         method: 'DELETE',
       });
 
@@ -185,6 +168,7 @@ const Message = () => {
       </div>
       <div className={styles['message-card-container']}>
         <div className={styles['message-card']}>
+        <AvatarPicker onSelect={(selectedAvatar) => setSelectedAvatar(selectedAvatar)} />
           <MessageList
             messages={messages}
             deleteMessage={deleteMessage}
