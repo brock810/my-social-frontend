@@ -87,7 +87,24 @@ const Message = () => {
     return storedMessages ? JSON.parse(storedMessages) : [];
   };
 
+  const initWebSocket = () => {
+    const newSocket = new WebSocket('ws://localhost:3001'); 
 
+    newSocket.addEventListener('open', (event) => {
+      console.log('WebSocket Connection Established');
+    });
+
+    newSocket.addEventListener('message', (event) => {
+      console.log('Message from server:', event.data);
+      setMessages((prevMessages) => [...prevMessages, JSON.parse(event.data)]);
+    });
+
+    newSocket.addEventListener('close', (event) => {
+      console.log('Server closed the connection', event);
+    });
+
+    return newSocket;
+  };
 
   const sendMessage = async () => {
     try {
