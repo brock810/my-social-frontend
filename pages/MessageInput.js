@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import AvatarPicker from './AvatarPicker';
 import styles from '../styles/MessageInput.module.css'; 
-
 const MessageInput = ({ newMessage, setNewMessage, sendMessage, setSelectedAvatar }) => {
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 

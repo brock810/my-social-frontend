@@ -8,6 +8,7 @@ const isBrowser = typeof window !== 'undefined';
 const MessageItem = ({ message, deleteMessage, formatTimestamp, selectedAvatar }) => (
   <li key={message._id} className={styles['chat-bubble']}>
     <div className={styles['avatar-container']}>
+      {/* Use the selectedAvatar prop here */}
       <img src={selectedAvatar} alt="User Avatar" className={styles['user-avatar']} />
     </div>
     <div className={styles['message-content']}>
@@ -38,7 +39,7 @@ const MessageList = ({ messages, deleteMessage, formatTimestamp, selectedAvatar 
           message={message}
           deleteMessage={deleteMessage}
           formatTimestamp={formatTimestamp}
-          selectedAvatar={selectedAvatar}
+          selectedAvatar={selectedAvatar} // Pass the selectedAvatar here
         />
       ))}
     </ul>
@@ -52,6 +53,7 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
   const [senderName, setSenderName] = useState('');
+  const [socket, setSocket] = useState(null);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -66,7 +68,7 @@ const Message = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch('http://localhost:1988/api/getMessage');
+      const response = await fetch('http://localhost:3001/api/getMessage');
       const result = await response.json();
       if (Array.isArray(result)) {
         setMessages(result);
@@ -77,13 +79,14 @@ const Message = () => {
   };
 
   const saveMessagesToLocalStorage = (messages) => {
-    isBrowser && localStorage.setItem('chatMessages', JSON.stringify(messages));
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
   };
 
   const getMessagesFromLocalStorage = () => {
-    const storedMessages = isBrowser ? localStorage.getItem('chatMessages') : null;
+    const storedMessages = localStorage.getItem('chatMessages');
     return storedMessages ? JSON.parse(storedMessages) : [];
   };
+
 
   const sendMessage = async () => {
     try {
@@ -92,7 +95,7 @@ const Message = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:1988/api/sendMessage', {
+      const response = await fetch('http://localhost:3001/api/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -106,6 +109,7 @@ const Message = () => {
         saveMessagesToLocalStorage([...messages, result.message]);
         setNewMessage('');
         setSenderName('');
+        socket.send(JSON.stringify(result.message)); // Send the message through WebSocket
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -114,7 +118,7 @@ const Message = () => {
 
   const deleteMessage = async (id) => {
     try {
-      const response = await fetch(`http://localhost:1988/api/deleteMessage/${id}`, {
+      const response = await fetch(`http://localhost:3001/api/deleteMessage/${id}`, {
         method: 'DELETE',
       });
 
@@ -129,6 +133,7 @@ const Message = () => {
 
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
+        socket.send(JSON.stringify({ deleted: true, _id: id })); // Notify WebSocket about deleted message
       } else {
         console.error('Error deleting message:', result.error);
       }
@@ -144,6 +149,12 @@ const Message = () => {
     } else {
       fetchMessages();
     }
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
   }, []);
 
   return (
@@ -154,7 +165,6 @@ const Message = () => {
       </div>
       <div className={styles['message-card-container']}>
         <div className={styles['message-card']}>
-          <AvatarPicker onSelect={(selectedAvatar) => setSelectedAvatar(selectedAvatar)} />
           <MessageList
             messages={messages}
             deleteMessage={deleteMessage}
