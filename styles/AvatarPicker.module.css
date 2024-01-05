@@ -1,0 +1,20 @@
+/* AvatarPicker.module.css */
+.avatar-picker {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+  
+  .selected-avatar {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border: 2px solid #5E2A86; 
+  }
+  
+  

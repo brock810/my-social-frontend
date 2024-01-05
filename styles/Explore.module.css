@@ -1,0 +1,150 @@
+/* styles/Explore.module.css */
+
+.explore-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(to bottom, #6A0572, #AB83A1);
+  color: white;
+  min-height: 100vh;
+  font-family: 'Montserrat', sans-serif;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); 
+  transition: box-shadow 0.3s ease-in-out; 
+}
+
+.explore-container:hover {
+  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.4); 
+}
+
+.explore-header {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
+  animation: bounce 3s infinite; 
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+.social-media-links {
+  max-width: 800px;
+  width: 100%;
+  max-height: 600px; 
+  overflow-y: auto; 
+}
+
+.media-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.media-link-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #3F0E40;
+  border-radius: 2px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+
+}
+
+.media-link-item a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.media-link-item button {
+  background: #5E2A86;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.media-link-item button:hover {
+  background: #7E57C2;
+}
+
+.add-media-link-form {
+  max-width: 800px;
+  width: 100%;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+}
+
+.add-link-button {
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out; 
+}
+
+.add-link-button:hover {
+  background: #45A049;
+  transform: scale(1.05); 
+}
+
+
+.add-link-button {
+  box-shadow: 0 0 10px rgba(94, 42, 134, 0.8);
+}
+
+.add-link-button:hover {
+  box-shadow: 0 0 20px rgba(94, 42, 134, 0.8);
+}
+
+
+.explore-container {
+  background: linear-gradient(to bottom, #6A0572, #AB83A1);
+  animation: gradientAnimation 10s infinite alternate;
+
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
+}
+.media-link-item {
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.media-link-item:hover {
+  transform: rotateY(180deg);
+}
