@@ -95,7 +95,7 @@ const Message = () => {
         return;
       }
 
-      const response = await fetch('http://localhost:3001/api/sendMessage', {
+      const response = await fetch('http://localhost:8888/api/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
