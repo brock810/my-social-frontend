@@ -68,7 +68,7 @@ const Message = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/getMessage');
+      const response = await fetch('http://localhost:8888/api/getMessage');
       const result = await response.json();
       if (Array.isArray(result)) {
         setMessages(result);
@@ -118,7 +118,7 @@ const Message = () => {
 
   const deleteMessage = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/deleteMessage/${id}`, {
+      const response = await fetch(`http://localhost:8888/api/deleteMessage/${id}`, {
         method: 'DELETE',
       });
 
