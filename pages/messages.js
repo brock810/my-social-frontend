@@ -1,3 +1,5 @@
+// Message.js
+
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Message.module.css';
 import AvatarPicker from './AvatarPicker';
@@ -52,13 +54,13 @@ const Message = () => {
   const [selectedAvatar, setSelectedAvatar] = useState(
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
-  const [senderName, setSenderName] = useState('');
-  const [socket, setSocket] = useState(null);
+  const [senderName, setSenderName] = useState(''); 
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
 
     if (isNaN(date.getTime())) {
+      
       return 'Invalid timestamp';
     }
 
@@ -68,7 +70,7 @@ const Message = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch('http://localhost:8888/api/getMessage');
+      const response = await fetch('http://localhost:3001/api/getMessage');
       const result = await response.json();
       if (Array.isArray(result)) {
         setMessages(result);
@@ -87,38 +89,40 @@ const Message = () => {
     return storedMessages ? JSON.parse(storedMessages) : [];
   };
 
-
   const sendMessage = async () => {
     try {
-      if (!newMessage) {
-        console.log('Message text is required.');
-        return;
-      }
-
-      const response = await fetch('http://localhost:8888/api/sendMessage', {
+      const response = await fetch('http://localhost:3001/api/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ text: newMessage, sender: senderName }),
+        body: JSON.stringify({ text: newMessage }),
       });
 
       const result = await response.json();
       if (result.message) {
-        setMessages((prevMessages) => [...prevMessages, result.message]);
-        saveMessagesToLocalStorage([...messages, result.message]);
+        const updatedMessages = [...messages, result.message];
+        setMessages(updatedMessages);
+        saveMessagesToLocalStorage(updatedMessages);
         setNewMessage('');
-        setSenderName('');
-        socket.send(JSON.stringify(result.message)); // Send the message through WebSocket
       }
     } catch (error) {
       console.error('Error sending message:', error);
     }
   };
 
+  useEffect(() => {
+    const storedMessages = getMessagesFromLocalStorage();
+    if (storedMessages.length > 0) {
+      setMessages(storedMessages);
+    } else {
+      fetchMessages();
+    }
+  }, []);
+
   const deleteMessage = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8888/api/deleteMessage/${id}`, {
+      const response = await fetch(`http://localhost:3001/api/deleteMessage/${id}`, {
         method: 'DELETE',
       });
 
@@ -133,7 +137,6 @@ const Message = () => {
 
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
-        socket.send(JSON.stringify({ deleted: true, _id: id })); // Notify WebSocket about deleted message
       } else {
         console.error('Error deleting message:', result.error);
       }
@@ -141,21 +144,6 @@ const Message = () => {
       console.error('Error deleting message:', error);
     }
   };
-
-  useEffect(() => {
-    const storedMessages = getMessagesFromLocalStorage();
-    if (storedMessages.length > 0) {
-      setMessages(storedMessages);
-    } else {
-      fetchMessages();
-    }
-
-    return () => {
-      if (socket) {
-        socket.close();
-      }
-    };
-  }, []);
 
   return (
     <div className={styles['message-container']}>
@@ -177,8 +165,6 @@ const Message = () => {
             sendMessage={sendMessage}
             selectedAvatar={selectedAvatar}
             setSelectedAvatar={setSelectedAvatar}
-            setSenderName={setSenderName}
-            senderName={senderName}
           />
         </div>
       </div>
