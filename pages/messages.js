@@ -1,3 +1,5 @@
+// Message.js
+
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Message.module.css';
 import AvatarPicker from './AvatarPicker';
@@ -46,7 +48,12 @@ const MessageList = ({ messages, deleteMessage, formatTimestamp, selectedAvatar 
   </div>
 );
 
-
+const Message = () => {
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState(
+    isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
+  );
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
