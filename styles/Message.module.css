@@ -1,4 +1,42 @@
-/* src/styles/Message.module.css */
+@media (max-width: 768px) {
+    .message-container {
+        font-size: 14px; /* Adjust font size for better readability on phones */
+    }
+
+    .message-card {
+        width: 100%; /* Adjust for smaller screens */
+    }
+
+    .message-card h2 {
+        font-size: 1.5rem; /* Adjust heading font size for phones */
+    }
+
+    .message-card p {
+        font-size: 1rem; /* Adjust paragraph font size for phones */
+    }
+
+    .message-card button {
+        padding: 10px; /* Adjust padding for better touch interaction on phones */
+    }
+
+    .message-input textarea {
+        padding: 10px; /* Adjust padding for better touch interaction on phones */
+    }
+
+    .message-input button {
+        padding: 10px 20px; /* Adjust padding for better touch interaction on phones */
+    }
+
+    .chat-bubble {
+        max-width: 100%; /* Adjust for smaller screens */
+        width: 100%;
+    }
+
+    .user-avatar {
+        width: 50px; /* Adjust avatar size for phones */
+        height: 50px;
+    }
+}
 
 .message-container {
     display: flex;

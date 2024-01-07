@@ -1,4 +1,20 @@
-/* MessageInput.module.css */
+@media (max-width: 768px) {
+    .message-input {
+      gap: 10px; /* Reduce gap for better spacing on phones */
+    }
+  
+    .avatar-button,
+    .close-button,
+    .message-textarea,
+    .send-button {
+      padding: 10px; /* Adjust padding for better touch interaction on phones */
+      border-radius: 4px; /* Smaller border-radius for a cleaner look on phones */
+    }
+  
+    .send-button {
+      padding: 10px 20px; /* Adjust padding for better touch interaction on phones */
+    }
+  }
 
 .message-input {
     display: flex;
@@ -39,5 +55,4 @@
     border-radius: 6px;
     cursor: pointer;
   }
-  
   
