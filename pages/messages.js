@@ -60,7 +60,7 @@ const Message = () => {
     const date = new Date(timestamp);
 
     if (isNaN(date.getTime())) {
-      
+      // Handle the case where the timestamp is not a valid date
       return 'Invalid timestamp';
     }
 

@@ -1,4 +1,86 @@
-/* styles/Friends.module.css */
+/* Existing styles above this line */
+
+@media (max-width: 768px) {
+  .friends-container {
+    padding: 10px;
+  }
+
+  .friends-header h1 {
+    font-size: 2rem;
+  }
+
+  .friends-header p {
+    font-size: 1rem;
+  }
+
+  .friends-card-container {
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .friends-card {
+    width: 100%;
+    animation: none;
+    margin-bottom: 10px; /* Adjust spacing as needed */
+  }
+
+  .friends-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .friends-card input {
+    width: 100%;
+    margin-bottom: 10px; /* Adjust spacing as needed */
+  }
+
+  .friends-card button {
+    width: 100%;
+  }
+
+  .friends-list {
+    width: 100%;
+    animation: none;
+    margin-bottom: 10px; /* Adjust spacing as needed */
+  }
+
+  .friends-list h2 {
+    font-size: 1.5rem;
+  }
+
+  .friends-list li {
+    font-size: 1.1rem;
+  }
+
+  .friends-scroll-list {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .friend-item {
+    max-height: none;
+  }
+
+  /* Additional styles for smaller screens can be added here */
+
+  /* Example: Hide flip animation on smaller screens */
+  @keyframes flip {
+    0% {
+      transform: none;
+    }
+    50% {
+      transform: none;
+    }
+    100% {
+      transform: none;
+    }
+  }
+
+  .friends-list:hover {
+    transform: none;
+  }
+}
+
+
 @import url('https://cdn.jsdelivr.net/npm/fira-code@5.2.0/distr/fira_code.css');
 
 @keyframes moveAround {
