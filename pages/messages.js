@@ -1,5 +1,3 @@
-// Message.js
-
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Message.module.css';
 import AvatarPicker from './AvatarPicker';
@@ -48,13 +46,7 @@ const MessageList = ({ messages, deleteMessage, formatTimestamp, selectedAvatar 
   </div>
 );
 
-const Message = () => {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [selectedAvatar, setSelectedAvatar] = useState(
-    isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
-  );
-  const [senderName, setSenderName] = useState(''); 
+
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -70,7 +62,7 @@ const Message = () => {
 
   const fetchMessages = async () => {
     try {
-      const response = await fetch('http://localhost:80/api/getMessage');
+      const response = await fetch('http://localhost:3001/api/getMessage');
       const result = await response.json();
       if (Array.isArray(result)) {
         setMessages(result);
@@ -91,7 +83,7 @@ const Message = () => {
 
   const sendMessage = async () => {
     try {
-      const response = await fetch('http://localhost:80/api/sendMessage', {
+      const response = await fetch('http://localhost:3001/api/sendMessage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +114,7 @@ const Message = () => {
 
   const deleteMessage = async (id) => {
     try {
-      const response = await fetch(`http://localhost:80/api/deleteMessage/${id}`, {
+      const response = await fetch(`http://localhost:3001/api/deleteMessage/${id}`, {
         method: 'DELETE',
       });
 

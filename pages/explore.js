@@ -10,7 +10,7 @@ const ExplorePage = () => {
 
   const handleAddMediaLink = async () => {
     try {
-      const response = await fetch('http://localhost:80/api/addSocialMediaLink', {
+      const response = await fetch('http://localhost:3001/api/addSocialMediaLink', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const ExplorePage = () => {
       console.log('Deleting media link with ID:', id);
 
       try {
-        const response = await fetch(`http://localhost:80/api/deleteSocialMediaLink/${id}`, {
+        const response = await fetch(`http://localhost:3001/api/deleteSocialMediaLink/${id}`, {
           method: 'DELETE',
         });
 
@@ -74,7 +74,7 @@ const ExplorePage = () => {
   useEffect(() => {
     const fetchSocialMediaLinks = async () => {
       try {
-        const response = await fetch('http://localhost:80/api/getSocialMediaLinks');
+        const response = await fetch('http://localhost:3001/api/getSocialMediaLinks');
         const result = await response.json();
 
         if (result.socialMediaLinks) {
