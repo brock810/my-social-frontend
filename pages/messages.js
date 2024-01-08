@@ -101,6 +101,7 @@ const Message = () => {
       console.log('New message from server:', data);
       // Update the messages state with the new message
       setMessages((prevMessages) => [...prevMessages, data]);
+      saveMessagesToLocalStorage([...prevMessages, data]);
     });
 
     return () => {
