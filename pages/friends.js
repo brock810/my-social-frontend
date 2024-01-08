@@ -1,32 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Friends.module.css';
-import ReconnectingWebSocket from 'reconnecting-websocket';  // Add this line
-
-const socket = new ReconnectingWebSocket('wss://noble-slow-dragon.glitch.me');
-
-socket.addEventListener('open', (event) => {
-  console.log('WebSocket connection opened:', event);
-
-  // Send a message to the server
-  socket.send('Hello, server!');
-});
-
-// Listen for messages from the server
-socket.addEventListener('message', (event) => {
-  console.log('Received message from server:', event.data);
-
-  // Process the received message or trigger actions based on your needs
-});
-
-// Connection closed
-socket.addEventListener('close', (event) => {
-  console.log('WebSocket connection closed:', event);
-});
-
-// Connection error
-socket.addEventListener('error', (event) => {
-  console.error('WebSocket error:', event);
-});
 
 const AnimatedText = ({ text }) => {
   const [animatedText, setAnimatedText] = useState('');
