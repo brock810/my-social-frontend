@@ -13,7 +13,7 @@ const NewsFeedPage = () => {
       const storedNews = JSON.parse(localStorage.getItem('news')) || [];
       setNews(storedNews);
 
-      const response = await fetch('http://localhost:3001/api/getNews');
+      const response = await fetch('http://localhost:1988/api/getNews');
       const result = await response.json();
 
       console.log('Fetch News Response:', result);
@@ -32,7 +32,7 @@ const NewsFeedPage = () => {
 
   const handleAddNews = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/addNews', {
+      const response = await fetch('http://localhost:1988/api/addNews', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const NewsFeedPage = () => {
 
   const handleDeleteNews = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/deleteNews/${id}`, {
+      const response = await fetch(`http://localhost:1988/api/deleteNews/${id}`, {
         method: 'DELETE',
       });
 
