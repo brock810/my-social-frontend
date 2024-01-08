@@ -1,3 +1,5 @@
+// NewsFeedPage.js
+
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Newsfeed.module.css';
 
@@ -13,7 +15,7 @@ const NewsFeedPage = () => {
       const storedNews = JSON.parse(localStorage.getItem('news')) || [];
       setNews(storedNews);
 
-      const response = await fetch('http://localhost:1988/api/getNews');
+      const response = await fetch('https://noble-slow-dragon.glitch.me/api/getNews');
       const result = await response.json();
 
       console.log('Fetch News Response:', result);
@@ -32,7 +34,7 @@ const NewsFeedPage = () => {
 
   const handleAddNews = async () => {
     try {
-      const response = await fetch('http://localhost:1988/api/addNews', {
+      const response = await fetch('https://noble-slow-dragon.glitch.me/api/addNews', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +62,7 @@ const NewsFeedPage = () => {
 
   const handleDeleteNews = async (id) => {
     try {
-      const response = await fetch(`http://localhost:1988/api/deleteNews/${id}`, {
+      const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteNews/${id}`, {
         method: 'DELETE',
       });
 
@@ -93,7 +95,6 @@ const NewsFeedPage = () => {
       item.title.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
       item.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
 
   return (
     <div className={`${styles['news-feed-container']} ${styles['global-body']}`}>
@@ -115,30 +116,30 @@ const NewsFeedPage = () => {
         />
         <button onClick={handleAddNews}>Add News</button>
       </div>
-       
-    <div className={styles['news-feed-search']}>
-      <input
-        type="text"
-        placeholder="Search News"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      {searchTerm && (
-        <button onClick={() => setSearchTerm('')}>Clear Search</button>
-      )}
-    </div>
 
-    <div className={styles['news-feed-card-container']}>
-      {filteredNews.map((item) => (
-        <div key={item._id} className={styles['news-feed-card']}>
-          <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
-          <p className="text-sm opacity-70">{item.content}</p>
-          <button onClick={() => handleDeleteNews(item._id)}>Delete</button>
-        </div>
-      ))}
+      <div className={styles['news-feed-search']}>
+        <input
+          type="text"
+          placeholder="Search News"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        {searchTerm && (
+          <button onClick={() => setSearchTerm('')}>Clear Search</button>
+        )}
+      </div>
+
+      <div className={styles['news-feed-card-container']}>
+        {filteredNews.map((item) => (
+          <div key={item._id} className={styles['news-feed-card']}>
+            <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
+            <p className="text-sm opacity-70">{item.content}</p>
+            <button onClick={() => handleDeleteNews(item._id)}>Delete</button>
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default NewsFeedPage;
