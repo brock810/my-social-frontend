@@ -34,7 +34,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
 
   const fetchData = async () => {
     try {
-      const responseUser = await fetch('http://localhost:1988/api/getUser');
+      const responseUser = await fetch('https://noble-slow-dragon.glitch.me/api/getUser');
       const resultUser = await responseUser.json();
 
       if (resultUser.user) {
@@ -43,7 +43,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         throw new Error(resultUser.error || 'Internal Server Error');
       }
 
-      const friendsResponse = await fetch('http://localhost:1988/api/getFriends');
+      const friendsResponse = await fetch('https://noble-slow-dragon.glitch.me/api/getFriends');
       const friendsResult = await friendsResponse.json();
 
       console.log('Fetch Friends Response:', friendsResult);
@@ -78,7 +78,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
 
   const handleDeleteFriend = async (friendId) => {
     try {
-      const response = await fetch(`http://localhost:1988/api/deleteFriend/${friendId}`, {
+      const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteFriend/${friendId}`, {
         method: 'DELETE',
       });
 
@@ -104,7 +104,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
 
   const handleAddFriend = async () => {
     try {
-      const response = await fetch('http://localhost:1988/api/addFriend', {
+      const response = await fetch('https://noble-slow-dragon.glitch.me/api/addFriend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
