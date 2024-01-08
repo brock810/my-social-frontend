@@ -150,6 +150,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   }, []);
   
 
+
   return (
     <div className={styles['friends-container']}>
       <div className={styles['friends-header']}>
