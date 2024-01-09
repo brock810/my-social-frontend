@@ -1,13 +1,25 @@
-// ExplorePage.js
-
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Explore.module.css';
+import io from 'socket.io-client';
+
+const isBrowser = typeof window !== 'undefined';
 
 const ExplorePage = () => {
   const [socialMediaLinks, setSocialMediaLinks] = useState([]);
   const [newMediaLink, setNewMediaLink] = useState('');
   const [error, setError] = useState(null);
   const [userName, setUserName] = useState('');
+
+  const socket = io('https://noble-slow-dragon.glitch.me');
+
+  const saveLinksToLocalStorage = (links) => {
+    localStorage.setItem('socialMediaLinks', JSON.stringify(links));
+  };
+
+  const getLinksFromLocalStorage = () => {
+    const storedLinks = localStorage.getItem('socialMediaLinks');
+    return storedLinks ? JSON.parse(storedLinks) : [];
+  };
 
   const handleAddMediaLink = async () => {
     try {
@@ -29,6 +41,7 @@ const ExplorePage = () => {
       if (result.success) {
         const newLink = { ...result.link, id: result.link._id };
         setSocialMediaLinks((prevLinks) => [...prevLinks, newLink]);
+        saveLinksToLocalStorage([...socialMediaLinks, newLink]);
         setNewMediaLink('');
         setUserName('');
       } else {
@@ -60,6 +73,7 @@ const ExplorePage = () => {
 
         if (result.success) {
           setSocialMediaLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
+          saveLinksToLocalStorage(socialMediaLinks.filter((link) => link.id !== id));
         } else {
           throw new Error(result.error || 'Internal Server Error');
         }
@@ -80,6 +94,7 @@ const ExplorePage = () => {
 
         if (result.socialMediaLinks) {
           setSocialMediaLinks(result.socialMediaLinks);
+          saveLinksToLocalStorage(result.socialMediaLinks);
         } else {
           throw new Error(result.error || 'Internal server Error');
         }
@@ -89,7 +104,13 @@ const ExplorePage = () => {
       }
     };
 
-    fetchSocialMediaLinks();
+    const storedLinks = getLinksFromLocalStorage();
+
+    if (storedLinks.length > 0) {
+      setSocialMediaLinks(storedLinks);
+    } else {
+      fetchSocialMediaLinks();
+    }
   }, []);
 
   return (
