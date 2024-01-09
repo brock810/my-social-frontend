@@ -25,12 +25,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
 
-  const FiraCodeFontLink = (
-    <link
-      href="https://cdn.jsdelivr.net/npm/fira-code@5.2.0/distr/fira_code.css"
-      rel="stylesheet"
-    />
-  );
+  const socket = new WebSocket('wss://noble-slow-dragon.glitch.me'); // WebSocket connection
 
   const fetchData = async () => {
     try {
@@ -54,6 +49,21 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       } else {
         throw new Error(friendsResult.error || 'Internal Server Error');
       }
+
+      // Listen for incoming friends updates from the WebSocket server
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'new_friend') {
+          const updatedFriends = [...friendsList, data.friend];
+          setFriendsList(updatedFriends);
+          saveFriendsToLocalStorage(updatedFriends);
+        } else if (data.type === 'delete_friend') {
+          const friendId = data.friendId;
+          const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
+          setFriendsList(updatedFriends);
+          saveFriendsToLocalStorage(updatedFriends);
+        }
+      };
     } catch (error) {
       console.error('Error fetching data from backend:', error);
     }
@@ -91,6 +101,11 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
+
+        // Move the WebSocket friend deletion emission here
+        if (socket) {
+          socket.send(JSON.stringify({ type: 'delete_friend', friendId }));
+        }
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
@@ -125,6 +140,11 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         saveFriendsToLocalStorage(updatedFriends);
 
         setFriendName('');
+
+        // Move the WebSocket friend addition emission here
+        if (socket) {
+          socket.send(JSON.stringify({ type: 'new_friend', friend: result.friend }));
+        }
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
@@ -146,6 +166,9 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     }
 
     return () => {
+      if (socket) {
+        socket.close();
+      }
       console.log('FriendsPage component unmounted');
     };
   }, []);
@@ -154,7 +177,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     <div className={styles['friends-container']}>
       <div className={styles['friends-header']}>
         <AnimatedText text="Add yourself to my friends list and connect with friends to grow your network! " />
-
       </div>
 
       <div className={styles['friends-card']}>
