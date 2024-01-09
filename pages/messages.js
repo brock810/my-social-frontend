@@ -56,13 +56,10 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
 
-const socket = io('https://noble-slow-dragon.glitch.me', {
-  withCredentials: true,
-  transports: ['websocket', 'polling'],
-});
+const socket = io('https://noble-slow-dragon.glitch.me');
 
   
-  const formatTimestamp = (timestamp) => {
+  function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
 
     if (isNaN(date.getTime())) {
@@ -72,7 +69,7 @@ const socket = io('https://noble-slow-dragon.glitch.me', {
 
     const options = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
     return new Intl.DateTimeFormat('en-US', options).format(date);
-  };
+  }
 
   const fetchMessages = async () => {
     try {
