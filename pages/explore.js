@@ -1,5 +1,3 @@
-// ExplorePage.js
-
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Explore.module.css';
 
@@ -9,9 +7,10 @@ const ExplorePage = () => {
   const [error, setError] = useState(null);
   const [userName, setUserName] = useState('');
 
+
   const handleAddMediaLink = async () => {
     try {
-      const response = await fetch('https://noble-slow-dragon.glitch.me/api/addSocialMediaLink', {
+      const response = await fetch('http://localhost:1988/api/addSocialMediaLink', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -21,11 +20,11 @@ const ExplorePage = () => {
           url: newMediaLink,
         }),
       });
-
+  
       const result = await response.json();
-
+  
       console.log('Add Media Link Response:', result);
-
+  
       if (result.success) {
         const newLink = { ...result.link, id: result.link._id };
         setSocialMediaLinks((prevLinks) => [...prevLinks, newLink]);
@@ -50,7 +49,7 @@ const ExplorePage = () => {
       console.log('Deleting media link with ID:', id);
 
       try {
-        const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteSocialMediaLink/${id}`, {
+        const response = await fetch(`http://localhost:1988/api/deleteSocialMediaLink/${id}`, {
           method: 'DELETE',
         });
 
@@ -75,7 +74,7 @@ const ExplorePage = () => {
   useEffect(() => {
     const fetchSocialMediaLinks = async () => {
       try {
-        const response = await fetch('https://noble-slow-dragon.glitch.me/api/getSocialMediaLinks');
+        const response = await fetch('http://localhost:1988/api/getSocialMediaLinks');
         const result = await response.json();
 
         if (result.socialMediaLinks) {
@@ -147,6 +146,7 @@ const ExplorePage = () => {
           </button>
         </div>
       </div>
+
     </div>
   );
 };
