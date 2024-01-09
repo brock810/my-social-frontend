@@ -128,19 +128,20 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         },
         body: JSON.stringify({ friendName, userId }),
       });
-
+  
       console.log('Server Response:', response);
-
+  
       const result = await response.json();
-
+  
       console.log('Add Friend Response:', result);
-
+  
       if (result.friend) {
+        // Update the friends list directly from the result
         const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
         setFriendName('');
-
+  
         // Move the WebSocket friend addition emission here
         if (socket) {
           socket.send(JSON.stringify({ type: 'new_friend', friend: result.friend }));
@@ -150,12 +151,13 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       }
     } catch (error) {
       console.error('Error adding friend on the backend:', error);
-
+  
       if (error.response && error.response.data) {
         console.error('Server Response:', error.response.data);
       }
     }
   };
+  
 
   useEffect(() => {
     const storedFriends = getFriendsFromLocalStorage();
