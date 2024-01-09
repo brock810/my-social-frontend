@@ -25,50 +25,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
 
-  const socket = new WebSocket('wss://noble-slow-dragon.glitch.me'); // WebSocket connection
-
-  const fetchData = async () => {
-    try {
-      const responseUser = await fetch('https://noble-slow-dragon.glitch.me/api/getUser');
-      const resultUser = await responseUser.json();
-
-      if (resultUser.user) {
-        setUserId(resultUser.user._id);
-      } else {
-        throw new Error(resultUser.error || 'Internal Server Error');
-      }
-
-      const friendsResponse = await fetch('https://noble-slow-dragon.glitch.me/api/getFriends');
-      const friendsResult = await friendsResponse.json();
-
-      console.log('Fetch Friends Response:', friendsResult);
-
-      if (friendsResult.friends) {
-        setFriendsList(friendsResult.friends);
-        saveFriendsToLocalStorage(friendsResult.friends); // Save to local storage
-      } else {
-        throw new Error(friendsResult.error || 'Internal Server Error');
-      }
-
-      // Listen for incoming friends updates from the WebSocket server
-      socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === 'new_friend') {
-          const updatedFriends = [...friendsList, data.friend];
-          setFriendsList(updatedFriends);
-          saveFriendsToLocalStorage(updatedFriends);
-        } else if (data.type === 'delete_friend') {
-          const friendId = data.friendId;
-          const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
-          setFriendsList(updatedFriends);
-          saveFriendsToLocalStorage(updatedFriends);
-        }
-      };
-    } catch (error) {
-      console.error('Error fetching data from backend:', error);
-    }
-  };
-
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -82,9 +38,30 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     localStorage.setItem('friendsList', JSON.stringify(friends));
   };
 
-  const getFriendsFromLocalStorage = () => {
-    const storedFriends = localStorage.getItem('friendsList');
-    return storedFriends ? JSON.parse(storedFriends) : [];
+  const handleDeleteFriend = async (friendId) => {
+    try {
+      const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteFriend/${friendId}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      console.log('Delete Friend Response:', result);
+
+      if (result.friend) {
+        const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
+        setFriendsList(updatedFriends);
+        saveFriendsToLocalStorage(updatedFriends);
+      } else {
+        throw new Error(result.error || 'Internal Server Error');
+      }
+    } catch (error) {
+      console.error('Error deleting friend on the backend:', error);
+
+      if (error.response && error.response.data) {
+        console.error('Server Response:', error.response.data);
+      }
+    }
   };
 
   const handleAddFriend = async () => {
@@ -106,11 +83,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
         setFriendName('');
-
-        // Move the WebSocket friend addition emission here
-        if (socket) {
-          socket.send(JSON.stringify({ type: 'new_friend', friend: result.friend }));
-        }
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
@@ -123,44 +95,32 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     }
   };
 
-  const handleDeleteFriend = async (friendId) => {
-    try {
-      const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteFriend/${friendId}`, {
-        method: 'DELETE',
-      });
-
-      const result = await response.json();
-
-      console.log('Delete Friend Response:', result);
-
-      if (result.success) {
-        setFriendsList((prevFriends) => prevFriends.filter((friend) => friend._id !== friendId));
-        saveFriendsToLocalStorage(updatedFriends);
-      } else {
-        throw new Error(result.error || 'Internal Server Error');
-      }
-    } catch (error) {
-      console.error('Error deleting friend on the frontend:', error);
-
-      if (error.response && error.response.data) {
-        console.error('Server Response:', error.response.data);
-      }
-    }
-  };
-  
-
   useEffect(() => {
-    const storedFriends = getFriendsFromLocalStorage();
-    if (storedFriends.length > 0) {
-      setFriendsList(storedFriends);
-    } else {
-      fetchData();
-    }
+    const fetchFriends = async () => {
+      try {
+        const response = await fetch('https://noble-slow-dragon.glitch.me/api/getFriends');
+        const result = await response.json();
 
-    return () => {
-      if (socket) {
-        socket.close();
+        if (result.friends) {
+          setFriendsList(result.friends);
+          saveFriendsToLocalStorage(result.friends);
+        } else {
+          throw new Error(result.error || 'Internal Server Error');
+        }
+      } catch (error) {
+        console.error('Error fetching friends from backend', error);
       }
+    };
+
+    // Fetch friends initially
+    fetchFriends();
+
+    // Poll every 10 seconds (adjust as needed)
+    const pollInterval = setInterval(fetchFriends, 10000);
+
+    // Cleanup when the component is unmounted
+    return () => {
+      clearInterval(pollInterval);
       console.log('FriendsPage component unmounted');
     };
   }, []);
