@@ -56,12 +56,6 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
 
-  const socket = io('https://noble-slow-dragon.glitch.me', {
-    path: '/socket.io',
-    transports: ['websocket', 'polling'],
-  });
-  
-
   function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
 
@@ -96,8 +90,10 @@ const Message = () => {
   };
 
   useEffect(() => {
-    // Fetch messages from the server
-    fetchMessages();
+    const socket = io('https://noble-slow-dragon.glitch.me', {
+      path: '/socket.io',
+      transports: ['websocket', 'polling'],
+    });
 
     // Listen for incoming messages from the WebSocket server
     socket.on('message', (data) => {
@@ -132,9 +128,7 @@ const Message = () => {
         setNewMessage('');
   
         // Move the WebSocket message emission here
-        if (socket) {
-          socket.emit('message', { type: 'new_message', message: result.message });
-        }
+        socket.emit('message', { type: 'new_message', message: result.message });
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -155,22 +149,21 @@ const Message = () => {
       const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteMessage/${id}`, {
         method: 'DELETE',
       });
-  
+
       const result = await response.json();
-  
+
       console.log('Delete Message Response:', result);
-  
+
       if (result.success) {
         const updatedMessages = messages
           .map((message) => (message._id === id ? { ...message, deleted: true } : message))
           .filter((message) => !message.deleted);
-  
+
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
-  
-        if (socket) {
-          socket.emit('message', { type: 'delete_message', messageId: id });
-        }
+
+        // Note: Ensure the event name ('message') matches your backend
+        socket.emit('message', { type: 'delete_message', messageId: id });
       } else {
         // Handle the case where result.success is not true
         console.error('Error deleting message:', result.error);
