@@ -1,9 +1,10 @@
+
+
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Message.module.css';
 import AvatarPicker from './AvatarPicker';
 import MessageInput from './MessageInput';
 import io from 'socket.io-client';
-import { useRef } from 'react';
 
 const isBrowser = typeof window !== 'undefined';
 
@@ -55,8 +56,6 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
 
-  const socketRef = useRef(null);
-
   function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
 
@@ -91,36 +90,22 @@ const Message = () => {
   };
 
   useEffect(() => {
-    // Create a WebSocket connection when the component mounts
-    const socket = new WebSocket('wss://noble-slow-dragon.glitch.me');
-
-    // Add event listeners for WebSocket connection events
-    socket.addEventListener('open', (event) => {
-      console.log('WebSocket connection opened:', event);
+    const socket = io('https://noble-slow-dragon.glitch.me', {
+      path: '/socket.io',
+      transports: ['websocket', 'polling'],
     });
 
-    socket.addEventListener('message', (event) => {
-      console.log('WebSocket message received:', event.data);
-      // Handle incoming messages as needed
-      const data = JSON.parse(event.data);
+    // Listen for incoming messages from the WebSocket server
+    socket.on('message', (data) => {
+      console.log('New message from server:', data);
+      // Update the messages state with the new message
       setMessages((prevMessages) => [...prevMessages, data]);
       saveMessagesToLocalStorage([...prevMessages, data]);
     });
 
-    socket.addEventListener('close', (event) => {
-      console.log('WebSocket connection closed:', event);
-    });
-
-    socket.addEventListener('error', (event) => {
-      console.error('WebSocket error:', event);
-    });
-
-    // Save the socket reference in the ref variable
-    socketRef.current = socket;
-
     return () => {
       // Clean up the WebSocket connection when the component is unmounted
-      socketRef.current.close();
+      socket.disconnect();
     };
   }, []);
 
@@ -133,19 +118,17 @@ const Message = () => {
         },
         body: JSON.stringify({ text: newMessage }),
       });
-
+  
       const result = await response.json();
-
+      
       if (result.message) {
         const updatedMessages = [...messages, result.message];
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
         setNewMessage('');
-
-        // Use the existing WebSocket connection
-        if (socketRef.current) {
-          socketRef.current.send(JSON.stringify({ type: 'new_message', message: result.message }));
-        }
+  
+        // Move the WebSocket message emission here
+        socket.emit('message', { type: 'new_message', message: result.message });
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -179,10 +162,8 @@ const Message = () => {
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
 
-        // Use the existing WebSocket connection
-        if (socketRef.current) {
-          socketRef.current.send(JSON.stringify({ type: 'delete_message', messageId: id }));
-        }
+        // Note: Ensure the event name ('message') matches your backend
+        socket.emit('message', { type: 'delete_message', messageId: id });
       } else {
         // Handle the case where result.success is not true
         console.error('Error deleting message:', result.error);
