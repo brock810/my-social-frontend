@@ -56,8 +56,11 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
 
-  const socket = io('wss://noble-slow-dragon.glitch.me');
-
+  const socket = io('https://noble-slow-dragon.glitch.me', {
+    withCredentials: true,
+    transports: ['websocket', 'polling'],
+  });
+  
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
 
