@@ -33,23 +33,15 @@ const ExplorePage = () => {
           url: newMediaLink,
         }),
       });
-  
+
       const result = await response.json();
-  
+
       console.log('Add Media Link Response:', result);
-  
+
       if (result.success) {
         const newLink = { ...result.link, id: result.link._id };
-  
-        // Broadcast the new link to all connected clients using WebSocket
-        socket.emit('newMediaLink', newLink);
-  
-        // Use the callback version of setSocialMediaLinks to ensure the latest state
-        setSocialMediaLinks((prevLinks) => {
-          saveLinksToLocalStorage([...prevLinks, newLink]);
-          return [...prevLinks, newLink];
-        });
-  
+        setSocialMediaLinks((prevLinks) => [...prevLinks, newLink]);
+        saveLinksToLocalStorage([...socialMediaLinks, newLink]);
         setNewMediaLink('');
         setUserName('');
       } else {
@@ -60,7 +52,6 @@ const ExplorePage = () => {
       setError(error.message || 'An error occurred while adding media link');
     }
   };
-  
 
   const handleDeleteMediaLink = async (id) => {
     try {
@@ -100,44 +91,27 @@ const ExplorePage = () => {
       try {
         const response = await fetch('https://noble-slow-dragon.glitch.me/api/getSocialMediaLinks');
         const result = await response.json();
-        const storedLinks = getLinksFromLocalStorage();
-  
+
         if (result.socialMediaLinks) {
           setSocialMediaLinks(result.socialMediaLinks);
           saveLinksToLocalStorage(result.socialMediaLinks);
         } else {
-          if (storedLinks.length > 0) {
-            setSocialMediaLinks(storedLinks);
-          } else {
-            fetchSocialMediaLinks();
-          }
+          throw new Error(result.error || 'Internal server Error');
         }
-  
-        // Listen for newMediaLink events from the server
-        socket.on('newMediaLink', (newLink) => {
-          setSocialMediaLinks((prevLinks) => [...prevLinks, newLink]);
-          saveLinksToLocalStorage([...socialMediaLinks, newLink]);
-        });
-  
-        return () => {
-          // Clean up the socket connection when the component unmounts
-          socket.disconnect();
-        };
       } catch (error) {
         console.error('Error fetching social media links from backend', error);
         setError(error.message || 'An error occurred while fetching social media links');
       }
     };
-  
+
     const storedLinks = getLinksFromLocalStorage();
-  
+
     if (storedLinks.length > 0) {
       setSocialMediaLinks(storedLinks);
     } else {
       fetchSocialMediaLinks();
     }
   }, []);
-  
 
   return (
     <div className={styles['explore-container']}>
