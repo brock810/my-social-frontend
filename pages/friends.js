@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Friends.module.css';
+import io from 'socket.io-client';
 
 const AnimatedText = ({ text }) => {
   const [animatedText, setAnimatedText] = useState('');
@@ -25,7 +26,8 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
 
-  const socket = new WebSocket('wss://noble-slow-dragon.glitch.me'); // WebSocket connection
+  const socket = io('https://noble-slow-dragon.glitch.me');
+
 
   const fetchData = async () => {
     try {
@@ -179,7 +181,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.log('FriendsPage component unmounted');
     };
   }, []);
-
   
 
   useEffect(() => {
