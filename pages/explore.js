@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
 import styles from '../styles/Explore.module.css';
+import io from 'socket.io-client';
 
-const socket = io('https://noble-slow-dragon.glitch.me');
+const isBrowser = typeof window !== 'undefined';
 
 const ExplorePage = () => {
   const [socialMediaLinks, setSocialMediaLinks] = useState([]);
   const [newMediaLink, setNewMediaLink] = useState('');
   const [error, setError] = useState(null);
   const [userName, setUserName] = useState('');
+
+  const socket = io('https://noble-slow-dragon.glitch.me');
+
+  const saveLinksToLocalStorage = (links) => {
+    localStorage.setItem('socialMediaLinks', JSON.stringify(links));
+  };
+
+  const getLinksFromLocalStorage = () => {
+    const storedLinks = localStorage.getItem('socialMediaLinks');
+    return storedLinks ? JSON.parse(storedLinks) : [];
+  };
 
   const handleAddMediaLink = async () => {
     try {
@@ -29,7 +40,8 @@ const ExplorePage = () => {
 
       if (result.success) {
         const newLink = { ...result.link, id: result.link._id };
-        socket.emit('addSocialMediaLink', newLink);
+        setSocialMediaLinks((prevLinks) => [...prevLinks, newLink]);
+        saveLinksToLocalStorage([...socialMediaLinks, newLink]);
         setNewMediaLink('');
         setUserName('');
       } else {
@@ -60,7 +72,8 @@ const ExplorePage = () => {
         console.log('Delete Media Link Response:', result);
 
         if (result.success) {
-          socket.emit('deleteSocialMediaLink', id);
+          setSocialMediaLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
+          saveLinksToLocalStorage(socialMediaLinks.filter((link) => link.id !== id));
         } else {
           throw new Error(result.error || 'Internal Server Error');
         }
@@ -81,6 +94,7 @@ const ExplorePage = () => {
 
         if (result.socialMediaLinks) {
           setSocialMediaLinks(result.socialMediaLinks);
+          saveLinksToLocalStorage(result.socialMediaLinks);
         } else {
           throw new Error(result.error || 'Internal server Error');
         }
@@ -90,20 +104,13 @@ const ExplorePage = () => {
       }
     };
 
-    fetchSocialMediaLinks();
+    const storedLinks = getLinksFromLocalStorage();
 
-    socket.on('addSocialMediaLink', (data) => {
-      setSocialMediaLinks((prevLinks) => [...prevLinks, data]);
-    });
-
-    socket.on('deleteSocialMediaLink', (deletedLinkId) => {
-      setSocialMediaLinks((prevLinks) => prevLinks.filter((link) => link.id !== deletedLinkId));
-    });
-
-    return () => {
-      socket.off('addSocialMediaLink');
-      socket.off('deleteSocialMediaLink');
-    };
+    if (storedLinks.length > 0) {
+      setSocialMediaLinks(storedLinks);
+    } else {
+      fetchSocialMediaLinks();
+    }
   }, []);
 
   return (
