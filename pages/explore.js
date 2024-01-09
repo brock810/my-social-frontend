@@ -1,7 +1,8 @@
-// ExplorePage.js
-
 import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
 import styles from '../styles/Explore.module.css';
+
+const socket = io('https://noble-slow-dragon.glitch.me');
 
 const ExplorePage = () => {
   const [socialMediaLinks, setSocialMediaLinks] = useState([]);
@@ -28,7 +29,7 @@ const ExplorePage = () => {
 
       if (result.success) {
         const newLink = { ...result.link, id: result.link._id };
-        setSocialMediaLinks((prevLinks) => [...prevLinks, newLink]);
+        socket.emit('addSocialMediaLink', newLink);
         setNewMediaLink('');
         setUserName('');
       } else {
@@ -59,7 +60,7 @@ const ExplorePage = () => {
         console.log('Delete Media Link Response:', result);
 
         if (result.success) {
-          setSocialMediaLinks((prevLinks) => prevLinks.filter((link) => link.id !== id));
+          socket.emit('deleteSocialMediaLink', id);
         } else {
           throw new Error(result.error || 'Internal Server Error');
         }
@@ -90,6 +91,19 @@ const ExplorePage = () => {
     };
 
     fetchSocialMediaLinks();
+
+    socket.on('addSocialMediaLink', (data) => {
+      setSocialMediaLinks((prevLinks) => [...prevLinks, data]);
+    });
+
+    socket.on('deleteSocialMediaLink', (deletedLinkId) => {
+      setSocialMediaLinks((prevLinks) => prevLinks.filter((link) => link.id !== deletedLinkId));
+    });
+
+    return () => {
+      socket.off('addSocialMediaLink');
+      socket.off('deleteSocialMediaLink');
+    };
   }, []);
 
   return (
