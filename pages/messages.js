@@ -94,6 +94,9 @@ const Message = () => {
     // Create a WebSocket connection when the component mounts
     const socket = new WebSocket('wss://noble-slow-dragon.glitch.me');
 
+    socketRef.current.addEventListener('open', (event) => {
+      console.log('WebSocket connection opened:', event);
+    });
     // Add event listeners for WebSocket connection events
     socket.addEventListener('open', (event) => {
       console.log('WebSocket connection opened:', event);
