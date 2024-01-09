@@ -1,4 +1,4 @@
-// Message.js
+
 
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Message.module.css';
@@ -56,10 +56,11 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
 
-  const socket = io('wss://noble-slow-dragon.glitch.me', {
-  path: '/socket.io',
-  transports: ['websocket', 'polling'],
-});
+  const socket = io('https://noble-slow-dragon.glitch.me', {
+    path: '/socket.io',
+    transports: ['websocket', 'polling'],
+  });
+  
 
   function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
