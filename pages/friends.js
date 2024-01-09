@@ -25,6 +25,50 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
 
+  const socket = new WebSocket('wss://noble-slow-dragon.glitch.me'); // WebSocket connection
+
+  const fetchData = async () => {
+    try {
+      const responseUser = await fetch('https://noble-slow-dragon.glitch.me/api/getUser');
+      const resultUser = await responseUser.json();
+
+      if (resultUser.user) {
+        setUserId(resultUser.user._id);
+      } else {
+        throw new Error(resultUser.error || 'Internal Server Error');
+      }
+
+      const friendsResponse = await fetch('https://noble-slow-dragon.glitch.me/api/getFriends');
+      const friendsResult = await friendsResponse.json();
+
+      console.log('Fetch Friends Response:', friendsResult);
+
+      if (friendsResult.friends) {
+        setFriendsList(friendsResult.friends);
+        saveFriendsToLocalStorage(friendsResult.friends); // Save to local storage
+      } else {
+        throw new Error(friendsResult.error || 'Internal Server Error');
+      }
+
+      // Listen for incoming friends updates from the WebSocket server
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'new_friend') {
+          const updatedFriends = [...friendsList, data.friend];
+          setFriendsList(updatedFriends);
+          saveFriendsToLocalStorage(updatedFriends);
+        } else if (data.type === 'delete_friend') {
+          const friendId = data.friendId;
+          const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
+          setFriendsList(updatedFriends);
+          saveFriendsToLocalStorage(updatedFriends);
+        }
+      };
+    } catch (error) {
+      console.error('Error fetching data from backend:', error);
+    }
+  };
+
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -38,6 +82,11 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     localStorage.setItem('friendsList', JSON.stringify(friends));
   };
 
+  const getFriendsFromLocalStorage = () => {
+    const storedFriends = localStorage.getItem('friendsList');
+    return storedFriends ? JSON.parse(storedFriends) : [];
+  };
+
   const handleDeleteFriend = async (friendId) => {
     try {
       const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteFriend/${friendId}`, {
@@ -49,21 +98,27 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.log('Delete Friend Response:', result);
 
       if (result.friend) {
-        const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
+        const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
+        setFriendName('');
+  
+        // Move the WebSocket friend addition emission here
+        if (socket) {
+          socket.send(JSON.stringify({ type: 'new_friend', friend: result.friend }));
+        }
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
     } catch (error) {
-      console.error('Error deleting friend on the backend:', error);
-
+      console.error('Error adding friend on the backend:', error);
+  
       if (error.response && error.response.data) {
         console.error('Server Response:', error.response.data);
       }
     }
   };
-
+  
   const handleAddFriend = async () => {
     try {
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/addFriend', {
@@ -125,6 +180,24 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     };
   }, []);
 
+  
+
+  useEffect(() => {
+    const storedFriends = getFriendsFromLocalStorage();
+    if (storedFriends.length > 0) {
+      setFriendsList(storedFriends);
+    } else {
+      fetchData();
+    }
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+      console.log('FriendsPage component unmounted');
+    };
+  }, []);
+
   return (
     <div className={styles['friends-container']}>
       <div className={styles['friends-header']}>
@@ -132,35 +205,35 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       </div>
 
       <div className={styles['friends-card']}>
-        <h2 className="text-xl font-semibold mb-2">Add Friend</h2>
-        <input
-          type="text"
-          value={friendName}
-          onChange={(e) => setFriendName(e.target.value)}
-          placeholder="Friend Name"
-        />
-        <button onClick={handleAddFriend}>Add Friend</button>
-      </div>
+      <h2 className="text-xl font-semibold mb-2">Add Friend</h2>
+      <input
+        type="text"
+        value={friendName}
+        onChange={(e) => setFriendName(e.target.value)}
+        placeholder="Friend Name"
+      />
+      <button onClick={handleAddFriend}>Add Friend</button>
+    </div>
 
-      <div className={styles['friends-card-container']}>
-        <div className={styles['friends-list']}>
-          <h2 className="text-xl font-semibold mb-2">Friends List</h2>
-          <ul>
-            {friendsList.map((friend) => (
-              <li
-                key={friend._id}
-                className={styles['friend-item']}
-                style={{ backgroundColor: friend.color || getRandomColor() }}
-              >
-                <span>{friend.name}</span>
-                <button onClick={() => handleDeleteFriend(friend._id)}>Delete</button>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <div className={styles['friends-card-container']}>
+      <div className={styles['friends-list']}>
+        <h2 className="text-xl font-semibold mb-2">Friends List</h2>
+        <ul>
+          {friendsList.map((friend) => (
+            <li
+              key={friend._id}
+              className={styles['friend-item']}
+              style={{ backgroundColor: friend.color || getRandomColor() }}
+            >
+              <span>{friend.name}</span>
+              <button onClick={() => handleDeleteFriend(friend._id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default FriendsPage;
