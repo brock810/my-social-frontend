@@ -97,27 +97,28 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
 
       console.log('Delete Friend Response:', result);
 
-      if (result.success) {
-        const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
+      if (result.friend) {
+        const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
-
-        // Move the WebSocket friend deletion emission here
+        setFriendName('');
+  
+        // Move the WebSocket friend addition emission here
         if (socket) {
-          socket.send(JSON.stringify({ type: 'delete_friend', friendId }));
+          socket.send(JSON.stringify({ type: 'new_friend', friend: result.friend }));
         }
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
     } catch (error) {
-      console.error('Error deleting friend on the frontend:', error);
-
+      console.error('Error adding friend on the backend:', error);
+  
       if (error.response && error.response.data) {
         console.error('Server Response:', error.response.data);
       }
     }
   };
-
+  
   const handleAddFriend = async () => {
     try {
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/addFriend', {
@@ -138,7 +139,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
-
         setFriendName('');
 
         // Move the WebSocket friend addition emission here
@@ -180,35 +180,35 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       </div>
 
       <div className={styles['friends-card']}>
-        <h2 className="text-xl font-semibold mb-2">Add Friend</h2>
-        <input
-          type="text"
-          value={friendName}
-          onChange={(e) => setFriendName(e.target.value)}
-          placeholder="Friend Name"
-        />
-        <button onClick={handleAddFriend}>Add Friend</button>
-      </div>
+      <h2 className="text-xl font-semibold mb-2">Add Friend</h2>
+      <input
+        type="text"
+        value={friendName}
+        onChange={(e) => setFriendName(e.target.value)}
+        placeholder="Friend Name"
+      />
+      <button onClick={handleAddFriend}>Add Friend</button>
+    </div>
 
-      <div className={styles['friends-card-container']}>
-        <div className={styles['friends-list']}>
-          <h2 className="text-xl font-semibold mb-2">Friends List</h2>
-          <ul>
-            {friendsList.map((friend) => (
-              <li
-                key={friend._id}
-                className={styles['friend-item']}
-                style={{ backgroundColor: friend.color || getRandomColor() }}
-              >
-                <span>{friend.name}</span>
-                <button onClick={() => handleDeleteFriend(friend._id)}>Delete</button>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <div className={styles['friends-card-container']}>
+      <div className={styles['friends-list']}>
+        <h2 className="text-xl font-semibold mb-2">Friends List</h2>
+        <ul>
+          {friendsList.map((friend) => (
+            <li
+              key={friend._id}
+              className={styles['friend-item']}
+              style={{ backgroundColor: friend.color || getRandomColor() }}
+            >
+              <span>{friend.name}</span>
+              <button onClick={() => handleDeleteFriend(friend._id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default FriendsPage;
