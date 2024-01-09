@@ -56,7 +56,7 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
 
-  const socket = io('http://localhost:1988', {
+  const socket = io('https://noble-slow-dragon.glitch.me', {
     path: '/socket.io',
     transports: ['websocket', 'polling'],
   });
