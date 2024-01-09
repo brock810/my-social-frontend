@@ -25,7 +25,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
 
-  const socket = new WebSocket('wss://noble-slow-dragon.glitch.me');
 
   const FiraCodeFontLink = (
     <link
@@ -114,28 +113,26 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         },
         body: JSON.stringify({ friendName, userId }),
       });
-
+  
       console.log('Server Response:', response);
-
+  
       const result = await response.json();
-
+  
       console.log('Add Friend Response:', result);
-
-      if (result.friend) {
+  
+      if (result.success) {
         const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
-
+  
         setFriendName('');
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
     } catch (error) {
       console.error('Error adding friend on the backend:', error);
-
-      if (error.response && error.response.data) {
-        console.error('Server Response:', error.response.data);
-      }
+  
+      // Handle the error here, e.g., show an error message to the user
     }
   };
 
