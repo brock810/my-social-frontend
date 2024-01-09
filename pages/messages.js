@@ -91,35 +91,35 @@ const Message = () => {
   };
 
   useEffect(() => {
-    // Initialize WebSocket connection
-    socketRef.current = new WebSocket('wss://noble-slow-dragon.glitch.me');
-  
-    // Event listener for WebSocket open
-    socketRef.current.addEventListener('open', (event) => {
+    // Create a WebSocket connection when the component mounts
+    const socket = new WebSocket('wss://noble-slow-dragon.glitch.me');
+
+    // Add event listeners for WebSocket connection events
+    socket.addEventListener('open', (event) => {
       console.log('WebSocket connection opened:', event);
     });
-  
-    // Event listener for WebSocket message
-    socketRef.current.addEventListener('message', (event) => {
+
+    socket.addEventListener('message', (event) => {
       console.log('WebSocket message received:', event.data);
       // Handle incoming messages as needed
       const data = JSON.parse(event.data);
       setMessages((prevMessages) => [...prevMessages, data]);
       saveMessagesToLocalStorage([...prevMessages, data]);
     });
-  
-    // Event listener for WebSocket close
-    socketRef.current.addEventListener('close', (event) => {
+
+    socket.addEventListener('close', (event) => {
       console.log('WebSocket connection closed:', event);
     });
-  
-    // Event listener for WebSocket error
-    socketRef.current.addEventListener('error', (event) => {
+
+    socket.addEventListener('error', (event) => {
       console.error('WebSocket error:', event);
     });
-  
+
+    // Save the socket reference in the ref variable
+    socketRef.current = socket;
+
     return () => {
-      // Clean up WebSocket connection when component unmounts
+      // Clean up the WebSocket connection when the component is unmounted
       socketRef.current.close();
     };
   }, []);
