@@ -3,6 +3,7 @@ import styles from '../styles/Message.module.css';
 import AvatarPicker from './AvatarPicker';
 import MessageInput from './MessageInput';
 import io from 'socket.io-client';
+import { useRef } from 'react';
 
 const isBrowser = typeof window !== 'undefined';
 
