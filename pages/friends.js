@@ -53,13 +53,8 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       // Listen for incoming friends updates from the WebSocket server
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
-        if (data.type === 'new_friend') {
-          const updatedFriends = [...friendsList, data.friend];
-          setFriendsList(updatedFriends);
-          saveFriendsToLocalStorage(updatedFriends);
-        } else if (data.type === 'delete_friend') {
-          const friendId = data.friendId;
-          const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
+        if (data.type === 'friends_update') {
+          const updatedFriends = data.friends;
           setFriendsList(updatedFriends);
           saveFriendsToLocalStorage(updatedFriends);
         }
@@ -98,13 +93,13 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.log('Delete Friend Response:', result);
 
       if (result.success) {
-        const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
+        const updatedFriends = result.friends; // Updated friends list from the server
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
 
-        // Move the WebSocket friend deletion emission here
+        // Broadcast friends update to all connected clients via WebSocket
         if (socket) {
-          socket.send(JSON.stringify({ type: 'delete_friend', friendId }));
+          socket.send(JSON.stringify({ type: 'friends_update', friends: updatedFriends }));
         }
       } else {
         throw new Error(result.error || 'Internal Server Error');
@@ -135,15 +130,15 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.log('Add Friend Response:', result);
 
       if (result.friend) {
-        const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
+        const updatedFriends = result.friends; // Updated friends list from the server
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
 
         setFriendName('');
 
-        // Move the WebSocket friend addition emission here
+        // Broadcast friends update to all connected clients via WebSocket
         if (socket) {
-          socket.send(JSON.stringify({ type: 'new_friend', friend: result.friend }));
+          socket.send(JSON.stringify({ type: 'friends_update', friends: updatedFriends }));
         }
       } else {
         throw new Error(result.error || 'Internal Server Error');
