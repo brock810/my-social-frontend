@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Friends.module.css';
-import io from 'socket.io-client';
 
 const AnimatedText = ({ text }) => {
   const [animatedText, setAnimatedText] = useState('');
@@ -26,8 +25,14 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
 
-  const socket = io('https://noble-slow-dragon.glitch.me');
+  const socket = new WebSocket('wss://noble-slow-dragon.glitch.me');
 
+  const FiraCodeFontLink = (
+    <link
+      href="https://cdn.jsdelivr.net/npm/fira-code@5.2.0/distr/fira_code.css"
+      rel="stylesheet"
+    />
+  );
 
   const fetchData = async () => {
     try {
@@ -47,16 +52,56 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
 
       if (friendsResult.friends) {
         setFriendsList(friendsResult.friends);
-        saveFriendsToLocalStorage(friendsResult.friends);
+        saveFriendsToLocalStorage(friendsResult.friends); // Save to local storage
       } else {
         throw new Error(friendsResult.error || 'Internal Server Error');
       }
-
-      socket.onmessage = (event) => {
-        // ... (WebSocket event handling)
-      };
     } catch (error) {
       console.error('Error fetching data from backend:', error);
+    }
+  };
+
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
+
+  const saveFriendsToLocalStorage = (friends) => {
+    localStorage.setItem('friendsList', JSON.stringify(friends));
+  };
+
+  const getFriendsFromLocalStorage = () => {
+    const storedFriends = localStorage.getItem('friendsList');
+    return storedFriends ? JSON.parse(storedFriends) : [];
+  };
+
+  const handleDeleteFriend = async (friendId) => {
+    try {
+      const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteFriend/${friendId}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      console.log('Delete Friend Response:', result);
+
+      if (result.success) {
+        const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
+        setFriendsList(updatedFriends);
+        saveFriendsToLocalStorage(updatedFriends);
+      } else {
+        throw new Error(result.error || 'Internal Server Error');
+      }
+    } catch (error) {
+      console.error('Error deleting friend on the frontend:', error);
+
+      if (error.response && error.response.data) {
+        console.error('Server Response:', error.response.data);
+      }
     }
   };
 
@@ -70,6 +115,8 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         body: JSON.stringify({ friendName, userId }),
       });
 
+      console.log('Server Response:', response);
+
       const result = await response.json();
 
       console.log('Add Friend Response:', result);
@@ -78,6 +125,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
+
         setFriendName('');
       } else {
         throw new Error(result.error || 'Internal Server Error');
@@ -92,34 +140,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   };
 
   useEffect(() => {
-    const fetchFriends = async () => {
-      try {
-        const response = await fetch('https://noble-slow-dragon.glitch.me/api/getFriends');
-        const result = await response.json();
-
-        if (result.friends) {
-          setFriendsList(result.friends);
-          saveFriendsToLocalStorage(result.friends);
-        } else {
-          throw new Error(result.error || 'Internal Server Error');
-        }
-      } catch (error) {
-        console.error('Error fetching friends from backend', error);
-      }
-    };
-
-    // Fetch friends initially
-    fetchFriends();
-
-    return () => {
-      if (socket) {
-        socket.close();
-      }
-      console.log('FriendsPage component unmounted');
-    };
-  }, [socket]);
-
-  useEffect(() => {
     const storedFriends = getFriendsFromLocalStorage();
     if (storedFriends.length > 0) {
       setFriendsList(storedFriends);
@@ -128,9 +148,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     }
 
     return () => {
-      if (socket) {
-        socket.close();
-      }
       console.log('FriendsPage component unmounted');
     };
   }, []);
@@ -139,6 +156,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     <div className={styles['friends-container']}>
       <div className={styles['friends-header']}>
         <AnimatedText text="Add yourself to my friends list and connect with friends to grow your network! " />
+
       </div>
 
       <div className={styles['friends-card']}>
