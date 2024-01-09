@@ -54,6 +54,8 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
 
+  const socketRef = useRef(null);
+
   function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
 
@@ -88,7 +90,7 @@ const Message = () => {
   };
 
   useEffect(() => {
-    // Update the WebSocket URL with your Glitch project's information
+    // Create a WebSocket connection when the component mounts
     const socket = new WebSocket('wss://noble-slow-dragon.glitch.me');
 
     // Add event listeners for WebSocket connection events
@@ -112,9 +114,12 @@ const Message = () => {
       console.error('WebSocket error:', event);
     });
 
+    // Save the socket reference in the ref variable
+    socketRef.current = socket;
+
     return () => {
       // Clean up the WebSocket connection when the component is unmounted
-      socket.close();
+      socketRef.current.close();
     };
   }, []);
 
@@ -127,20 +132,19 @@ const Message = () => {
         },
         body: JSON.stringify({ text: newMessage }),
       });
-  
+
       const result = await response.json();
-      
+
       if (result.message) {
         const updatedMessages = [...messages, result.message];
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
         setNewMessage('');
-  
-        // Move the WebSocket message emission here
-        const socket = new WebSocket('wss://noble-slow-dragon.glitch.me');
-        socket.addEventListener('open', () => {
-          socket.send(JSON.stringify({ type: 'new_message', message: result.message }));
-        });
+
+        // Use the existing WebSocket connection
+        if (socketRef.current) {
+          socketRef.current.send(JSON.stringify({ type: 'new_message', message: result.message }));
+        }
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -174,11 +178,10 @@ const Message = () => {
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
 
-        // Note: Ensure the event name ('message') matches your backend
-        const socket = new WebSocket('wss://noble-slow-dragon.glitch.me');
-        socket.addEventListener('open', () => {
-          socket.send(JSON.stringify({ type: 'delete_message', messageId: id }));
-        });
+        // Use the existing WebSocket connection
+        if (socketRef.current) {
+          socketRef.current.send(JSON.stringify({ type: 'delete_message', messageId: id }));
+        }
       } else {
         // Handle the case where result.success is not true
         console.error('Error deleting message:', result.error);
