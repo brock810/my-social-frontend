@@ -12,7 +12,7 @@ const AnimatedText = ({ text }) => {
       if (animatedText.length === text.length) {
         clearInterval(interval);
       }
-    }, 100);
+    }, 100); 
 
     return () => clearInterval(interval);
   }, [animatedText, text]);
@@ -24,7 +24,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   const [friendName, setFriendName] = useState('');
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
-
 
   const FiraCodeFontLink = (
     <link
@@ -51,7 +50,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
 
       if (friendsResult.friends) {
         setFriendsList(friendsResult.friends);
-        saveFriendsToLocalStorage(friendsResult.friends); // Save to local storage
       } else {
         throw new Error(friendsResult.error || 'Internal Server Error');
       }
@@ -59,7 +57,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.error('Error fetching data from backend:', error);
     }
   };
-
+  
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -111,7 +109,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ friendName, userId }),
+        body: JSON.stringify({ friendName, userId }), 
       });
 
       console.log('Server Response:', response);
@@ -150,12 +148,13 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.log('FriendsPage component unmounted');
     };
   }, []);
+  
 
   return (
     <div className={styles['friends-container']}>
       <div className={styles['friends-header']}>
         <AnimatedText text="Add yourself to my friends list and connect with friends to grow your network! " />
-
+        
       </div>
 
       <div className={styles['friends-card']}>
