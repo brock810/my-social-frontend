@@ -12,9 +12,6 @@ const NewsFeedPage = () => {
 
   const fetchNews = async () => {
     try {
-      const storedNews = JSON.parse(localStorage.getItem('news')) || [];
-      setNews(storedNews);
-
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/getNews');
       const result = await response.json();
 
@@ -22,7 +19,6 @@ const NewsFeedPage = () => {
 
       if (result.news) {
         setNews(result.news);
-        localStorage.setItem('news', JSON.stringify(result.news));
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
@@ -48,7 +44,6 @@ const NewsFeedPage = () => {
 
       if (result.news) {
         setNews((prevNews) => [...prevNews, result.news]);
-        localStorage.setItem('news', JSON.stringify([...news, result.news]));
         setNewTitle('');
         setNewContent('');
       } else {
@@ -59,7 +54,7 @@ const NewsFeedPage = () => {
       setError(error.message || 'An error occurred while adding news');
     }
   };
-
+  
   const handleDeleteNews = async (id) => {
     try {
       const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteNews/${id}`, {
