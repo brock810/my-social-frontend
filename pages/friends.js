@@ -113,26 +113,28 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         },
         body: JSON.stringify({ friendName, userId }),
       });
-  
+
       console.log('Server Response:', response);
-  
+
       const result = await response.json();
-  
+
       console.log('Add Friend Response:', result);
-  
-      if (result.success) {
+
+      if (result.friend) {
         const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
-  
+
         setFriendName('');
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
     } catch (error) {
       console.error('Error adding friend on the backend:', error);
-  
-      // Handle the error here, e.g., show an error message to the user
+
+      if (error.response && error.response.data) {
+        console.error('Server Response:', error.response.data);
+      }
     }
   };
 
