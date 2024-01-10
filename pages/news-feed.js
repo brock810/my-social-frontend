@@ -12,6 +12,9 @@ const NewsFeedPage = () => {
 
   const fetchNews = async () => {
     try {
+      const storedNews = JSON.parse(localStorage.getItem('news')) || [];
+      setNews(storedNews);
+
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/getNews');
       const result = await response.json();
 
@@ -19,6 +22,7 @@ const NewsFeedPage = () => {
 
       if (result.news) {
         setNews(result.news);
+        localStorage.setItem('news', JSON.stringify(result.news));
       } else {
         throw new Error(result.error || 'Internal Server Error');
       }
@@ -43,7 +47,8 @@ const NewsFeedPage = () => {
       console.log('Add News Response:', result);
 
       if (result.news) {
-        setNews(result.news);
+        setNews((prevNews) => [...prevNews, result.news]);
+        localStorage.setItem('news', JSON.stringify([...news, result.news]));
         setNewTitle('');
         setNewContent('');
       } else {
@@ -54,6 +59,43 @@ const NewsFeedPage = () => {
       setError(error.message || 'An error occurred while adding news');
     }
   };
+
+  const handleDeleteNews = async (id) => {
+    try {
+      const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteNews/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      console.log('Delete News Response:', result);
+
+      if (result.success) {
+        setNews((prevNews) => prevNews.filter((item) => item._id !== id));
+        localStorage.setItem('news', JSON.stringify(news.filter((item) => item._id !== id)));
+      } else {
+        throw new Error(result.error || 'Internal Server Error');
+      }
+    } catch (error) {
+      console.error('Error deleting news on the frontend:', error);
+      setError(error.message || 'An error occurred while deleting news');
+    }
+  };
+
+  useEffect(() => {
+    fetchNews();
+  }, []);
+
+  const filteredNews = news.filter(
+    (item) =>
+      item.title.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+      item.content.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className={`${styles['news-feed-container']} ${styles['global-body']}`}>
       <div className={styles['news-feed-header']}>
