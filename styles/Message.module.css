@@ -1,12 +1,11 @@
 @media (max-width: 768px) {
     .message-container {
         font-size: 14px; /* Adjust font size for better readability on phones */
+        width: 100%; /* Adjust for smaller screens */
     }
 
     .message-card {
-        width: 100%; /* Adjust for smaller screens */      
-        max-width: 400px; /* Set a maximum width for better readability */
-        margin-bottom: 16px; /* Add margin for spacing */
+        width: 100%; /* Adjust for smaller screens */
     }
 
     .message-card h2 {
