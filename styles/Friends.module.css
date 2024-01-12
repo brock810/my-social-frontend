@@ -1,11 +1,7 @@
 /* Existing styles above this line */
 
 @media (max-width: 768px) {
-  .friends-container {
-    padding: 10px;
-    width: 110px;
-  }
-
+ 
   .friends-header h1 {
     font-size: 2rem;
   }
