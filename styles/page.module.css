@@ -1,0 +1,296 @@
+/* Existing styles above this line */
+
+@media (max-width: 768px) {
+    .friends-container {
+      padding: 10px;
+    }
+  
+    .friends-header h1 {
+      font-size: 2rem;
+    }
+  
+    .friends-header p {
+      font-size: 1rem;
+    }
+  
+    .friends-card-container {
+      height: auto;
+      overflow-y: visible;
+    }
+  
+    .friends-card {
+      width: 100%;
+      animation: none;
+      margin-bottom: 10px; /* Adjust spacing as needed */
+    }
+  
+    .friends-card h2 {
+      font-size: 1.2rem;
+    }
+  
+    .friends-card input {
+      width: 100%;
+      margin-bottom: 10px; /* Adjust spacing as needed */
+    }
+  
+    .friends-card button {
+      width: 100%;
+    }
+  
+    .friends-list {
+      width: 100%;
+      animation: none;
+      margin-bottom: 10px; /* Adjust spacing as needed */
+    }
+  
+    .friends-list h2 {
+      font-size: 1.5rem;
+    }
+  
+    .friends-list li {
+      font-size: 1.1rem;
+    }
+  
+    .friends-scroll-list {
+      max-height: none;
+      overflow-y: visible;
+    }
+  
+    .friend-item {
+      max-height: none;
+    }
+  
+    /* Additional styles for smaller screens can be added here */
+  
+    /* Example: Hide flip animation on smaller screens */
+    @keyframes flip {
+      0% {
+        transform: none;
+      }
+      50% {
+        transform: none;
+      }
+      100% {
+        transform: none;
+      }
+    }
+  
+    .friends-list:hover {
+      transform: none;
+    }
+  }
+  
+  
+  @import url('https://cdn.jsdelivr.net/npm/fira-code@5.2.0/distr/fira_code.css');
+  
+  @keyframes moveAround {
+    0% {
+      transform: translateX(0) translateY(0);
+    }
+    25% {
+      transform: translateX(100%) translateY(0);
+    }
+    50% {
+      transform: translateX(100%) translateY(310%);
+    }
+    75% {
+      transform: translateX(-105%) translateY(310%); 
+    }
+    100% {
+      transform: translateX(-105%) translateY(-0.5%);
+    }
+  }
+  
+  @keyframes typeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .friends-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(to bottom, #6A0572, #AB83A1);
+    color: white;
+    min-height: 100vh;
+    font-family: 'Fira Code', monospace;
+  }
+  
+  .friends-header {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .friends-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    height: 600px; 
+    overflow-y: auto; 
+  }
+  
+  .friends-card {
+    background: #3F0E40;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    animation: moveAround 2.5s ease-in-out;
+  }
+  
+  .friends-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .friends-header h1, .friends-header p {
+    animation: typeIn 2s ease-in-out; 
+  }
+  
+  .friends-card h2 {
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    text-align: left; 
+  }
+  
+  .friends-card input {
+    width: calc(100% - 20px); 
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    text-align: left; 
+    color: black; 
+  }
+  
+  .friends-card button {
+    width: 100%;
+    padding: 10px;
+    background: #5E2A86;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .friends-card button:hover {
+    background: #7E57C2;
+  }
+  
+  .friends-list li button {
+    padding: 10px;
+    background: #d60a69; 
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .friends-list li button:hover {
+    background: #F44336; 
+  }
+  
+  
+  .friends-list {
+    background: linear-gradient(to bottom, #3F0E40, #6A0572);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out;
+    animation: flip 2s; 
+    animation-delay: 2.5s;
+    transform-style: preserve-3d;
+  }
+  
+  @keyframes flip {
+    0% {
+      transform: rotateY(0deg); 
+    }
+    50% {
+      transform: rotateY(180deg); 
+    }
+    100% {
+      transform: rotateY(0deg); 
+    }
+  }
+  
+  .friends-list:hover {
+    transform: scale(1.05);
+  }
+  
+  .friends-list h2 {
+    color: #fff;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .friends-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .friends-list li {
+    color: #000000;
+    font-size: 1.3rem;
+    font-style: initial;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #201e1e;
+    padding: 8px;
+  }
+  
+  /* Scrollable friends list */
+  .friends-scroll-list {
+    max-height: 200px;
+    overflow-y: auto;
+    transition: max-height 0.5s ease-in-out;
+  }
+  
+  .friends-scroll-list:hover {
+    max-height: 400px; 
+  }
+  
+  .friend-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid  #5E2A86; 
+    overflow-y: auto; 
+    max-height: 200px; 
+    scrollbar-width: thin;
+    scrollbar-color: #5E2A86 #3F0E40; 
+  }
+  
+  .friend-item::-webkit-scrollbar {
+    width: 2px; 
+    border-radius: 25%;
+  }
+  
+  .friend-item::-webkit-scrollbar-thumb {
+    background-color: #ffffff; 
+  }
+  
+  .friend-item::-webkit-scrollbar-track {
+    background-color: #3F0E40; 
+  }
