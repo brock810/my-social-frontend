@@ -1,7 +1,26 @@
 @media (max-width: 768px) {
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-x: hidden;
+    }
+    
+    body {
+        background: linear-gradient(to bottom, #6A0572, #AB83A1);
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        animation: pulse 2s ease-in-out, gradientBackground 10s linear infinite;
+    }
+    
+    
     .message-container {
-        font-size: 14px; /* Adjust font size for better readability on phones */
-        width: 100%; /* Adjust for smaller screens */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        min-height: 100vh;
     }
 
     .message-card {
