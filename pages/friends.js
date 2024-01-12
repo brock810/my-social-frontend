@@ -1,53 +1,60 @@
+// FriendsPage.js
+
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Friends.module.css';
 
+// AnimatedText Component for typing animation
 const AnimatedText = ({ text }) => {
+  // State for managing animated text
   const [animatedText, setAnimatedText] = useState('');
 
+  // Effect to update animatedText over time
   useEffect(() => {
     const interval = setInterval(() => {
       const nextLetter = text.charAt(animatedText.length);
       setAnimatedText((prevText) => prevText + nextLetter);
 
+      // Clear interval when animation completes
       if (animatedText.length === text.length) {
         clearInterval(interval);
       }
-    }, 100); 
+    }, 100);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Cleanup on component unmount
   }, [animatedText, text]);
 
+  // Render animated text
   return <h1 className="text-4xl font-bold mb-4">{animatedText}</h1>;
 };
 
+// FriendsPage Component
 const FriendsPage = ({ friendsList: initialFriendsList }) => {
+  // State variables
   const [friendName, setFriendName] = useState('');
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
 
-  const FiraCodeFontLink = (
-    <link
-      href="https://cdn.jsdelivr.net/npm/fira-code@5.2.0/distr/fira_code.css"
-      rel="stylesheet"
-    />
-  );
-
+  // Fetch data from backend API
   const fetchData = async () => {
+    // Fetch user data
     try {
+      // Fetch user data
       const responseUser = await fetch('https://noble-slow-dragon.glitch.me/api/getUser');
       const resultUser = await responseUser.json();
 
+      // Set user ID from the response
       if (resultUser.user) {
         setUserId(resultUser.user._id);
       } else {
         throw new Error(resultUser.error || 'Internal Server Error');
       }
 
+      // Fetch friends data
       const friendsResponse = await fetch('https://noble-slow-dragon.glitch.me/api/getFriends');
       const friendsResult = await friendsResponse.json();
 
+      // Log fetch result and update friends list
       console.log('Fetch Friends Response:', friendsResult);
-
       if (friendsResult.friends) {
         setFriendsList(friendsResult.friends);
       } else {
@@ -57,7 +64,8 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.error('Error fetching data from backend:', error);
     }
   };
-  
+
+  // Function to generate random color
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -67,15 +75,18 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     return color;
   };
 
+  // Function to save friends to local storage
   const saveFriendsToLocalStorage = (friends) => {
     localStorage.setItem('friendsList', JSON.stringify(friends));
   };
 
+  // Function to get friends from local storage
   const getFriendsFromLocalStorage = () => {
     const storedFriends = localStorage.getItem('friendsList');
     return storedFriends ? JSON.parse(storedFriends) : [];
   };
 
+  // Function to handle deleting a friend
   const handleDeleteFriend = async (friendId) => {
     try {
       const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteFriend/${friendId}`, {
@@ -87,6 +98,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.log('Delete Friend Response:', result);
 
       if (result.success) {
+        // Update friends list after deletion
         const updatedFriends = friendsList.filter((friend) => friend._id !== friendId);
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
@@ -102,6 +114,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     }
   };
 
+  // Function to handle adding a friend
   const handleAddFriend = async () => {
     try {
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/addFriend', {
@@ -109,7 +122,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ friendName, userId }), 
+        body: JSON.stringify({ friendName, userId }),
       });
 
       console.log('Server Response:', response);
@@ -119,6 +132,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       console.log('Add Friend Response:', result);
 
       if (result.friend) {
+        // Update friends list after addition
         const updatedFriends = [...friendsList, { ...result.friend, color: getRandomColor() }];
         setFriendsList(updatedFriends);
         saveFriendsToLocalStorage(updatedFriends);
@@ -136,6 +150,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
     }
   };
 
+  // Effect to fetch data on component mount
   useEffect(() => {
     const storedFriends = getFriendsFromLocalStorage();
     if (storedFriends.length > 0) {
@@ -144,19 +159,21 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
       fetchData();
     }
 
+    // Cleanup function on component unmount
     return () => {
       console.log('FriendsPage component unmounted');
     };
   }, []);
-  
 
+  // Render FriendsPage component
   return (
     <div className={styles['friends-container']}>
       <div className={styles['friends-header']}>
-        <AnimatedText text="Add yourself to my friends list and Mongo database!"/>
-        
+        {/* AnimatedText component for typing animation */}
+        <AnimatedText text="Add yourself to my friends list and Mongo database!" />
       </div>
 
+      {/* Form to add a friend */}
       <div className={styles['friends-card']}>
         <h2 className="text-xl font-semibold mb-2">Add Friend</h2>
         <input
@@ -168,6 +185,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
         <button onClick={handleAddFriend}>Add Friend</button>
       </div>
 
+      {/* Display list of friends */}
       <div className={styles['friends-card-container']}>
         <div className={styles['friends-list']}>
           <h2 className="text-xl font-semibold mb-2">Friends List</h2>

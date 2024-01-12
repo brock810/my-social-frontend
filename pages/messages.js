@@ -4,24 +4,29 @@ import AvatarPicker from './AvatarPicker';
 import MessageInput from './MessageInput';
 import io from 'socket.io-client';
 
+// Check if running in a browser environment
 const isBrowser = typeof window !== 'undefined';
 
+// Individual message item component
 const MessageItem = ({ message, deleteMessage, formatTimestamp, selectedAvatar }) => (
   <li key={message._id} className={styles['chat-bubble']}>
     <div className={styles['avatar-container']}>
-      {/* Use the selectedAvatar prop here */}
+      {/* Display the selectedAvatar prop */}
       <img src={selectedAvatar} alt="User Avatar" className={styles['user-avatar']} />
     </div>
     <div className={styles['message-content']}>
       <span className={styles['message-sender']}>{message.sender}: </span>
+      {/* Conditional rendering based on message deletion */}
       {message.deleted ? (
         <span className={styles['message-deleted']}>This message has been deleted</span>
       ) : (
         <>
           {message.text}
           <div className={styles['message-metadata']}>
+            {/* Display the formatted timestamp */}
             <span className={styles['timestamp']}>{formatTimestamp(message.timestamp)}</span>
           </div>
+          {/* Button to delete the message */}
           <button onClick={() => deleteMessage(message._id)} className={styles['delete-button']}>
             Delete
           </button>
@@ -31,9 +36,11 @@ const MessageItem = ({ message, deleteMessage, formatTimestamp, selectedAvatar }
   </li>
 );
 
+// Component for the list of messages
 const MessageList = ({ messages, deleteMessage, formatTimestamp, selectedAvatar }) => (
   <div className={styles['message-list']}>
     <ul>
+      {/* Map through messages and render MessageItem component for each */}
       {messages.map((message) => (
         <MessageItem
           key={message._id}
@@ -47,6 +54,7 @@ const MessageList = ({ messages, deleteMessage, formatTimestamp, selectedAvatar 
   </div>
 );
 
+// Main Message component
 const Message = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -54,9 +62,10 @@ const Message = () => {
     isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
   );
 
-const socket = io('https://noble-slow-dragon.glitch.me');
+  // Initialize socket connection to the server
+  const socket = io('https://noble-slow-dragon.glitch.me');
 
-  
+  // Function to format timestamps in a user-friendly way
   function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
 
@@ -69,10 +78,13 @@ const socket = io('https://noble-slow-dragon.glitch.me');
     return new Intl.DateTimeFormat('en-US', options).format(date);
   }
 
+  // Function to fetch messages from the server
   const fetchMessages = async () => {
     try {
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/getMessage');
       const result = await response.json();
+
+      // Update the state with the fetched messages if they are an array
       if (Array.isArray(result)) {
         setMessages(result);
       }
@@ -81,15 +93,18 @@ const socket = io('https://noble-slow-dragon.glitch.me');
     }
   };
 
+  // Function to save messages to local storage
   const saveMessagesToLocalStorage = (messages) => {
     localStorage.setItem('chatMessages', JSON.stringify(messages));
   };
 
+  // Function to retrieve messages from local storage
   const getMessagesFromLocalStorage = () => {
     const storedMessages = localStorage.getItem('chatMessages');
     return storedMessages ? JSON.parse(storedMessages) : [];
   };
 
+  // Effect hook to run on component mount
   useEffect(() => {
     // Fetch messages from the server
     fetchMessages();
@@ -102,12 +117,13 @@ const socket = io('https://noble-slow-dragon.glitch.me');
       saveMessagesToLocalStorage([...prevMessages, data]);
     });
 
+    // Clean up the WebSocket connection when the component is unmounted
     return () => {
-      // Clean up the WebSocket connection when the component is unmounted
       socket.disconnect();
     };
   }, []);
 
+  // Function to send a new message
   const sendMessage = async () => {
     try {
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/sendMessage', {
@@ -117,16 +133,17 @@ const socket = io('https://noble-slow-dragon.glitch.me');
         },
         body: JSON.stringify({ text: newMessage }),
       });
-  
+
       const result = await response.json();
-      
+
       if (result.message) {
+        // Update state with the new message and save to local storage
         const updatedMessages = [...messages, result.message];
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
         setNewMessage('');
-  
-        // Move the WebSocket message emission here
+
+        // Emit a message to the WebSocket server
         if (socket) {
           socket.emit('message', { type: 'new_message', message: result.message });
         }
@@ -136,6 +153,7 @@ const socket = io('https://noble-slow-dragon.glitch.me');
     }
   };
 
+  // Effect hook to run on component mount to fetch messages or retrieve from local storage
   useEffect(() => {
     const storedMessages = getMessagesFromLocalStorage();
     if (storedMessages.length > 0) {
@@ -145,24 +163,27 @@ const socket = io('https://noble-slow-dragon.glitch.me');
     }
   }, []);
 
+  // Function to delete a message
   const deleteMessage = async (id) => {
     try {
       const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteMessage/${id}`, {
         method: 'DELETE',
       });
-  
+
       const result = await response.json();
-  
+
       console.log('Delete Message Response:', result);
-  
+
       if (result.success) {
+        // Update state with the deleted message and save to local storage
         const updatedMessages = messages
           .map((message) => (message._id === id ? { ...message, deleted: true } : message))
           .filter((message) => !message.deleted);
-  
+
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
-  
+
+        // Emit a message to the WebSocket server about the deleted message
         if (socket) {
           socket.emit('message', { type: 'delete_message', messageId: id });
         }
@@ -175,7 +196,6 @@ const socket = io('https://noble-slow-dragon.glitch.me');
       console.error('Error deleting message:', error);
     }
   };
-  
 
   return (
     <div className={styles['message-container']}>
@@ -185,6 +205,7 @@ const socket = io('https://noble-slow-dragon.glitch.me');
       </div>
       <div className={styles['message-card-container']}>
         <div className={styles['message-card']}>
+          {/* Render the MessageList and MessageInput components */}
           <MessageList
             messages={messages}
             deleteMessage={deleteMessage}

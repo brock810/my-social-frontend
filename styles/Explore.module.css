@@ -1,49 +1,49 @@
+/* Media queries for responsive design */
 @media (max-width: 768px) {
   .explore-container {
-    font-size: 14px; /* Adjust font size for better readability on phones */
+    font-size: 14px;
   }
 
   .explore-header h1 {
-    font-size: 1.8rem; /* Adjust heading font size for phones */
+    font-size: 1.8rem;
   }
 
   .social-media-links {
-    max-height: none; /* Remove max height for better display on phones */
+    max-height: none;
   }
 
   .media-link-item {
-    padding: 10px; /* Adjust padding for better spacing on phones */
-    margin-bottom: 10px; /* Adjust spacing between items on phones */
+    padding: 10px;
+    margin-bottom: 10px;
   }
 
   .media-link-item a {
-    font-size: 1rem; /* Adjust font size for links on phones */
+    font-size: 1rem;
   }
 
   .media-link-item button {
-    padding: 6px; /* Adjust padding for better touch interaction on phones */
+    padding: 6px;
   }
 
   .add-media-link-form {
-    font-size: 14px; /* Adjust font size for form on phones */
+    font-size: 14px;
   }
 
   .input-container {
-    gap: 8px; /* Adjust gap for better spacing on phones */
-    margin-bottom: 10px; /* Adjust spacing between items on phones */
+    gap: 8px;
+    margin-bottom: 10px;
   }
 
   .input-field {
-    padding: 8px; /* Adjust padding for better touch interaction on phones */
+    padding: 8px;
   }
 
   .add-link-button {
-    padding: 8px; /* Adjust padding for better touch interaction on phones */
+    padding: 8px;
   }
 }
 
-
-
+/* Styles for the main container */
 .explore-container {
   display: flex;
   flex-direction: column;
@@ -53,22 +53,25 @@
   color: white;
   min-height: 100vh;
   font-family: 'Montserrat', sans-serif;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2); 
-  transition: box-shadow 0.3s ease-in-out; 
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
 }
 
+/* Hover effect on the container */
 .explore-container:hover {
-  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.4); 
+  box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.4);
 }
 
+/* Header styling with bounce animation */
 .explore-header {
   max-width: 800px;
   width: 100%;
   text-align: center;
   margin-bottom: 20px;
-  animation: bounce 3s infinite; 
+  animation: bounce 3s infinite;
 }
 
+/* Bounce animation keyframes */
 @keyframes bounce {
   0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
@@ -81,19 +84,22 @@
   }
 }
 
+/* Styling for the social media links container */
 .social-media-links {
   max-width: 800px;
   width: 100%;
-  max-height: 600px; 
-  overflow-y: auto; 
+  max-height: 600px;
+  overflow-y: auto;
 }
 
+/* Styling for the media links list */
 .media-links-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
+/* Styling for each media link item */
 .media-link-item {
   display: flex;
   justify-content: space-between;
@@ -103,15 +109,16 @@
   padding: 15px;
   margin-bottom: 15px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-
 }
 
+/* Styling for media link item anchor (link) */
 .media-link-item a {
   color: #fff;
   text-decoration: none;
   font-size: 1.2rem;
 }
 
+/* Styling for media link item button */
 .media-link-item button {
   background: #5E2A86;
   color: #fff;
@@ -122,21 +129,25 @@
   transition: background 0.3s ease-in-out;
 }
 
+/* Hover effect on media link item button */
 .media-link-item button:hover {
   background: #7E57C2;
 }
 
+/* Styling for the add media link form */
 .add-media-link-form {
   max-width: 800px;
   width: 100%;
 }
 
+/* Styling for the input container */
 .input-container {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
 
+/* Styling for input fields */
 .input-field {
   width: 100%;
   padding: 10px;
@@ -145,6 +156,7 @@
   outline: none;
 }
 
+/* Styling for the add link button */
 .add-link-button {
   background: #4CAF50;
   color: #fff;
@@ -152,30 +164,32 @@
   border-radius: 6px;
   padding: 10px;
   cursor: pointer;
-  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out; 
+  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
+/* Hover effect on add link button */
 .add-link-button:hover {
   background: #45A049;
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
-
+/* Box shadow effect on add link button */
 .add-link-button {
   box-shadow: 0 0 10px rgba(94, 42, 134, 0.8);
 }
 
+/* Hover effect on add link button with increased box shadow */
 .add-link-button:hover {
   box-shadow: 0 0 20px rgba(94, 42, 134, 0.8);
 }
 
-
+/* Gradient animation for the main container background */
 .explore-container {
   background: linear-gradient(to bottom, #6A0572, #AB83A1);
   animation: gradientAnimation 10s infinite alternate;
-
 }
 
+/* Gradient animation keyframes */
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 0%;
@@ -184,11 +198,14 @@
     background-position: 0% 100%;
   }
 }
+
+/* 3D rotation effect on media link item hover */
 .media-link-item {
   transform-style: preserve-3d;
   transition: transform 0.5s ease;
 }
 
+/* 3D rotation on media link item hover */
 .media-link-item:hover {
   transform: rotateY(180deg);
 }

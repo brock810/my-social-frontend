@@ -1,95 +1,104 @@
+/* Media queries for smaller screens */
 @media (max-width: 768px) {
+    /* Adjustments for the message container on smaller screens */
     .message-container {
-        width: 112%;       
+      width: 112%;
     }
-
+  
+    /* Styles for individual message cards on smaller screens */
     .message-card {
-        width: 100%;
-        max-width: 100%;
-        padding: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 100%;
+      padding: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-
+  
+    /* Header styles for message cards on smaller screens */
     .message-card h2 {
-        font-size: 1.2rem;
+      font-size: 1.2rem;
     }
-
+  
+    /* Paragraph styles for message cards on smaller screens */
     .message-card p {
-        font-size: 0.9rem;
+      font-size: 0.9rem;
     }
-
+  
+    /* Button styles for message cards on smaller screens */
     .message-card button {
-        padding: 8px;
+      padding: 8px;
     }
-
+  
+    /* Input textarea styles for messages on smaller screens */
     .message-input textarea {
-        padding: 8px;
+      padding: 8px;
     }
-
+  
+    /* Button styles for message input on smaller screens */
     .message-input button {
-        padding: 8px 16px;
+      padding: 8px 16px;
     }
-
+  
+    /* User avatar styles for smaller screens */
     .user-avatar {
-        width: 40px;
-        height: 40px;
+      width: 40px;
+      height: 40px;
     }
-
+  
+    /* Styles for the message list on smaller screens */
     .message-list {
-        max-height: 200px;
-        overflow-y: auto;
+      max-height: 200px;
+      overflow-y: auto;
     }
-
-    .message-input textarea {
-        margin-bottom: 10px;
-        padding: 8px;
-    }
-
-    .message-input button {
-        padding: 8px 16px;
-    }
-
+  
+    /* Additional styles for smaller screens can be added here */
+  
+    /* Styling for chat bubbles on smaller screens */
     .chat-bubble {
-        max-width: 100%;
-        padding: 8px;
-        margin-bottom: 8px;
+      max-width: 100%;
+      padding: 8px;
+      margin-bottom: 8px;
     }
-
+  
+    /* User avatar styles for chat bubbles on smaller screens */
     .user-avatar {
-        width: 40px;
-        height: 40px;
+      width: 40px;
+      height: 40px;
     }
-
+  
+    /* Delete button styles for chat bubbles on smaller screens */
     .delete-button {
-        padding: 6.5px 16px;
+      padding: 6.5px 16px;
     }
-
+  
+    /* Styling for avatar buttons, close buttons, message textarea, and send buttons on smaller screens */
     .avatar-button,
     .close-button,
     .message-textarea,
     .send-button {
-        padding: 8px;
-        border-radius: 4px;
+      padding: 8px;
+      border-radius: 4px;
     }
-
+  
+    /* Styling for the send button on smaller screens */
     .send-button {
-        padding: 8px 16px;
+      padding: 8px 16px;
     }
-
+  
+    /* Styling for avatar, selected avatar, and avatar picker on smaller screens */
     .avatar,
     .selected-avatar {
-        width: 40px;
-        height: 40px;
+      width: 40px;
+      height: 40px;
     }
-
+  
+    /* Styling for the avatar picker gap on smaller screens */
     .avatar-picker {
-        gap: 8px;
+      gap: 8px;
     }
-}
-
-
-
-.message-container {
+  }
+  
+  /* Styles for the main message container */
+  .message-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -100,93 +109,103 @@
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
     animation: pulse 2s ease-in-out, gradientBackground 10s linear infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-}
-
-@keyframes gradientBackground {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-  .message-header {
-    max-width: 800px; 
-    width: 100%;
-    text-align: center;
-    margin-bottom: 20px; 
   }
   
-  .message-card-container {
+  /* Keyframe animation for pulse effect */
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  /* Keyframe animation for gradient background effect */
+  @keyframes gradientBackground {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  /* Styles for the message header */
+  .message-header {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  
+  /* Container for a list of message cards */
+.message-card-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 16px; 
+    gap: 16px; /* Spacing between message cards */
   }
   
+  /* Styling for individual message cards */
   .message-card {
     background: #3F0E40;
     border-radius: 8px;
-    padding: 20px; 
+    padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 500px; 
-    margin-bottom: 16px; 
+    width: 500px; /* Fixed width for message cards */
+    margin-bottom: 16px; /* Spacing between message cards */
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.5s;
-}
-
-.message-card:hover {
-    animation: tiltAnimation 5s forwards; 
-}
-
-@keyframes tiltAnimation {
+  }
+  
+  /* Tilt animation on hover for message cards */
+  .message-card:hover {
+    animation: tiltAnimation 5s forwards;
+  }
+  
+  @keyframes tiltAnimation {
     0% {
-        transform: perspective(1000px) rotateY(7deg);
+      transform: perspective(1000px) rotateY(7deg);
     }
     100% {
-        transform: perspective(1000px) rotateY(7deg);
+      transform: perspective(1000px) rotateY(7deg);
     }
-}
+  }
   
+  /* Styling for the list of messages */
   .message-list {
-    max-height: 300px; 
+    max-height: 300px; /* Maximum height for the message list with scroll overflow */
     overflow-y: auto;
   }
   
+  /* Styling for the input textarea for sending messages */
   .message-input textarea {
     width: 100%;
-    margin-bottom: 20px; 
-    padding: 12px; 
+    margin-bottom: 20px; /* Spacing below the input textarea */
+    padding: 12px;
     border: 1px solid #5E2A86;
-    border-radius: 6px; 
+    border-radius: 6px;
     box-sizing: border-box;
   }
   
+  /* Styling for the button to send messages */
   .message-input button {
-    padding: 12px 24px; 
+    padding: 12px 24px;
     background-color: #7E57C2;
     color: white;
     border: none;
-    border-radius: 6px; 
+    border-radius: 6px;
     cursor: pointer;
   }
   
-  
+  /* Styling for chat bubbles in the message list */
   .chat-bubble {
     max-width: 400px;
     width: auto;
@@ -195,20 +214,22 @@
     margin-bottom: 10px;
     display: flex;
     align-items: flex-start;
-    
   }
   
+  /* Styling for the user avatar in chat bubbles */
   .user-avatar {
     margin-right: 10px;
     width: 65px;
     height: 65px;
   }
   
+  /* Styling for the content of messages in chat bubbles */
   .message-content {
     flex-grow: 1;
     font-size: 20px;
   }
   
+  /* Styling for the button to delete messages */
   .delete-button {
     background-color: #7E57C2;
     padding: 8.5px 20px;
@@ -216,55 +237,42 @@
     border-radius: 4px;
     color: white;
   }
-
-.message-input {
-  display: flex;
-  flex-direction: column;
-  gap: 16px; 
-}
-
-.message-input textarea {
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 12px;
-  border: 1px solid #5E2A86;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
-
-.message-input button {
-  padding: 12px 24px;
-  background-color: #7E57C2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-
-.chat-bubble:hover {
-    background-color: #7e3788; 
-    color: #333; 
-}
-
-.user-avatar {
+  
+  /* Styling for the overall message input section */
+  .message-input {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* Spacing between elements in the message input section */
+  }
+  
+  /* Hover effect for chat bubbles */
+  .chat-bubble:hover {
+    background-color: #7e3788; /* Darker background color on hover */
+    color: #333; /* Darker text color on hover */
+  }
+  
+  /* Transition effect for user avatar box shadow on hover */
+  .user-avatar {
     transition: box-shadow 0.5s;
-}
-
-.user-avatar:hover {
+  }
+  
+  /* Box shadow effect for user avatar on hover */
+  .user-avatar:hover {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-
-.delete-button:hover {
-    background-color: #5E2A86;
-}
-
-.message-input textarea:hover {
-    border-color: #7E57C2;
-}
-
-.message-input button:hover {
-    background-color: #5E2A86;
-}
-
+  }
+  
+  /* Hover effect for delete button */
+  .delete-button:hover {
+    background-color: #5E2A86; /* Darker background color on hover */
+  }
+  
+  /* Hover effect for message input textarea border color */
+  .message-input textarea:hover {
+    border-color: #7E57C2; /* Darker border color on hover */
+  }
+  
+  /* Hover effect for send button */
+  .message-input button:hover {
+    background-color: #5E2A86; /* Darker background color on hover */
+  }
+  

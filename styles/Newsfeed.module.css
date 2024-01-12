@@ -1,83 +1,104 @@
+/* Responsive Styles for News Feed Container */
 @media (max-width: 768px) {
+  /* Adjust padding and font size for smaller screens */
   .news-feed-container {
-    padding: 5px; 
-    font-size: 14px; 
+    padding: 5px;
+    font-size: 14px;
   }
 
+  /* Resize main header on smaller screens */
   .news-feed-header h1 {
-    font-size: 2rem; 
+    font-size: 2rem;
   }
 
+  /* Adjust card dimensions and spacing on smaller screens */
   .news-feed-card {
-    width: 100%; 
-    height: auto; 
-    margin-bottom: 10px; 
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
   }
 
+  /* Resize card title and adjust margins for better spacing */
   .news-feed-card h2 {
-    font-size: 1.2rem; 
-    margin-bottom: 8px; 
+    font-size: 1.2rem;
+    margin-bottom: 8px;
   }
 
+  /* Resize card content text and allow for unlimited height */
   .news-feed-card p {
-    font-size: 1rem; 
-    max-height: none; 
+    font-size: 1rem;
+    max-height: none;
   }
 
+  /* Adjust font size and padding for search input and button */
   .news-feed-search input,
   .news-feed-search button {
-    font-size: 0.9rem; 
-    padding: 10px; 
+    font-size: 0.9rem;
+    padding: 10px;
   }
 
+  /* Highlight search button on hover */
   .news-feed-search button:hover {
     background: #7E57C2;
   }
 
+  /* Maximize form width for better user experience */
   .news-feed-form {
-    max-width: 100%; 
+    max-width: 100%;
   }
 
+  /* Adjust font size and padding for form input, textarea, and button */
   .news-feed-form input,
   .news-feed-form textarea,
   .news-feed-form button {
-    font-size: 0.9rem; 
-    padding: 8px; 
+    font-size: 0.9rem;
+    padding: 8px;
   }
 
+  /* Highlight form button on hover */
   .news-feed-form button:hover {
     background: #7E57C2;
   }
 }
 
+/* Base Styles for News Feed Container */
 .news-feed-container {
+  /* Center content vertically and horizontally */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* Add padding and background gradient */
   padding: 10px;
   background: linear-gradient(to bottom, #6A0572, #AB83A1);
+  /* Set text color to white and define min height */
   color: white;
   min-height: 100vh;
+  /* Set font family */
   font-family: 'Roboto', sans-serif;
 }
 
-
+/* Styles for News Feed Header */
 .news-feed-header {
+  /* Limit maximum width and center text */
   max-width: 1200px;
   width: 100%;
   text-align: center;
   margin-bottom: 10px;
 }
 
+/* Styles for News Feed Card Container */
 .news-feed-card-container {
+  /* Arrange cards in a flex container with wrapping and center content */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
 }
 
+/* Styles for Individual News Feed Card */
 .news-feed-card {
+  /* Styling for the card itself */
   background: #3F0E40;
   border-radius: 12px;
   padding: 20px;
@@ -95,44 +116,55 @@
   transition: transform 0.5s;
 }
 
+/* Styles for Search Input and Button */
 .news-feed-search input, .news-feed-search button {
+  /* Set common font size and padding */
   font-size: 1rem;
   padding: 12px;
+  /* Style the search button with rounded corners and border */
   border-radius: 20px;
   border: 1px solid #7E57C2;
 }
 
+/* Styles for Card Title */
 .news-feed-card h2 {
+  /* Set text color to white, increase font size, and adjust margin */
   color: #fff;
   font-size: 1.5rem;
   margin-bottom: 10px;
   overflow: hidden;
 }
 
+/* Styles for Card Content */
 .news-feed-card p {
+  /* Set text color to white, adjust font size and line height */
   color: #fff;
   font-size: 1rem;
   line-height: 1.4;
+  /* Allow text overflow with ellipsis and limit max height */
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 100px;
 }
 
-
+/* Global Body Styles */
 .global-body {
+  /* Apply background gradient animation */
   background: linear-gradient(to bottom, #6A0572, #AB83A1);
   animation: gradientAnimation 10s ease infinite;
 }
 
+/* Animation Keyframes for Gradient Animation */
 @keyframes gradientAnimation {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-
+/* Styles for News Feed Card Button */
 .news-feed-card button {
-  background: #c01010; 
+  /* Set button styles */
+  background: #c01010;
   color: #fff;
   cursor: pointer;
   padding: 8px;
@@ -141,26 +173,28 @@
   position: absolute;
   bottom: 8px;
   left: 50%;
-  transform: translateX(-50%); 
+  transform: translateX(-50%);
   transform-origin: center;
   transition: transform 0.3s ease-in-out, background 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-
+/* Hover effect for News Feed Card Button */
 .news-feed-card button:hover {
   transform: scale(1.2);
-  background: #ff0000; 
+  background: #ff0000;
   color: #fff;
 }
 
-
+/* Styles for Search Container */
 .news-feed-search {
+  /* Center align and add bottom margin */
   margin-bottom: 20px;
   text-align: center;
-
 }
 
+/* Styles for Search Input */
 .news-feed-search input {
+  /* Set width, padding, and border styles */
   width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
@@ -168,7 +202,9 @@
   outline: none;
 }
 
+/* Styles for Search Button */
 .news-feed-search button {
+  /* Set button styles with margin and transition effect */
   background: #5E2A86;
   color: #fff;
   cursor: pointer;
@@ -179,11 +215,14 @@
   transition: background 0.3s ease-in-out;
 }
 
+/* Hover effect for Search Button */
 .news-feed-search button:hover {
   background: #7E57C2;
 }
 
+/* Styles for News Feed Form Container */
 .news-feed-form {
+  /* Set max width, center margin, padding, background, and border-radius */
   max-width: 600px;
   margin: 20px auto;
   padding: 20px;
@@ -192,9 +231,11 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Styles for Form Input, Textarea, and Button */
 .news-feed-form input,
 .news-feed-form textarea,
 .news-feed-form button {
+  /* Set width, bottom margin, padding, border styles, and outline to none */
   width: 100%;
   margin-bottom: 15px;
   padding: 8px;
@@ -203,32 +244,41 @@
   outline: none;
 }
 
+/* Styles for Form Button */
 .news-feed-form button {
+  /* Set button styles with background, color, cursor, and transition effect */
   background: #5E2A86;
   color: #fff;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
 }
 
+/* Hover effect for Form Button */
 .news-feed-form button:hover {
   background: #7E57C2;
 }
 
+/* Hover effect for News Feed Card */
 .news-feed-card:hover {
+  /* Apply scaling, box shadow, and rotation on hover */
   transform: scale(1.07);
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
   transform: rotateY(180deg);
 }
 
+/* Back side of News Feed Card */
 .news-feed-card .back {
+  /* Rotate to the back side */
   transform: rotateY(180deg);
 }
 
-
+/* Header Animation Keyframes */
 .news-feed-header {
+  /* Apply pulse animation on header */
   animation: pulse 1.5s infinite alternate;
 }
 
+/* Pulse Animation Keyframes */
 @keyframes pulse {
   from {
     transform: scale(1);

@@ -3,24 +3,30 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Newsfeed.module.css';
 
+// NewsFeedPage component
 const NewsFeedPage = () => {
+  // State variables
   const [news, setNews] = useState([]);
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Function to fetch news from the backend
   const fetchNews = async () => {
     try {
+      // Retrieve stored news from local storage
       const storedNews = JSON.parse(localStorage.getItem('news')) || [];
       setNews(storedNews);
 
+      // Fetch news from the backend API
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/getNews');
       const result = await response.json();
 
       console.log('Fetch News Response:', result);
 
       if (result.news) {
+        // Update state with the fetched news and save to local storage
         setNews(result.news);
         localStorage.setItem('news', JSON.stringify(result.news));
       } else {
@@ -32,8 +38,10 @@ const NewsFeedPage = () => {
     }
   };
 
+  // Function to handle adding news
   const handleAddNews = async () => {
     try {
+      // Add news to the backend
       const response = await fetch('https://noble-slow-dragon.glitch.me/api/addNews', {
         method: 'POST',
         headers: {
@@ -47,6 +55,7 @@ const NewsFeedPage = () => {
       console.log('Add News Response:', result);
 
       if (result.news) {
+        // Update state with the new news and save to local storage
         setNews((prevNews) => [...prevNews, result.news]);
         localStorage.setItem('news', JSON.stringify([...news, result.news]));
         setNewTitle('');
@@ -60,8 +69,10 @@ const NewsFeedPage = () => {
     }
   };
 
+  // Function to handle deleting news
   const handleDeleteNews = async (id) => {
     try {
+      // Delete news on the backend
       const response = await fetch(`https://noble-slow-dragon.glitch.me/api/deleteNews/${id}`, {
         method: 'DELETE',
       });
@@ -75,6 +86,7 @@ const NewsFeedPage = () => {
       console.log('Delete News Response:', result);
 
       if (result.success) {
+        // Update state with the deleted news and save to local storage
         setNews((prevNews) => prevNews.filter((item) => item._id !== id));
         localStorage.setItem('news', JSON.stringify(news.filter((item) => item._id !== id)));
       } else {
@@ -86,16 +98,19 @@ const NewsFeedPage = () => {
     }
   };
 
+  // Effect hook to fetch news on component mount
   useEffect(() => {
     fetchNews();
   }, []);
 
+  // Filtered news based on search term
   const filteredNews = news.filter(
     (item) =>
       item.title.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
       item.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // JSX return
   return (
     <div className={`${styles['news-feed-container']} ${styles['global-body']}`}>
       <div className={styles['news-feed-header']}>
@@ -103,6 +118,7 @@ const NewsFeedPage = () => {
       </div>
 
       <div className={styles['news-feed-form']}>
+        {/* Input fields for adding news */}
         <input
           type="text"
           placeholder="Name"
@@ -114,26 +130,31 @@ const NewsFeedPage = () => {
           value={newContent}
           onChange={(e) => setNewContent(e.target.value)}
         />
+        {/* Button to add news */}
         <button onClick={handleAddNews}>Add News</button>
       </div>
 
       <div className={styles['news-feed-search']}>
+        {/* Input for searching news */}
         <input
           type="text"
           placeholder="Search News"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+        {/* Button to clear search term */}
         {searchTerm && (
           <button onClick={() => setSearchTerm('')}>Clear Search</button>
         )}
       </div>
 
       <div className={styles['news-feed-card-container']}>
+        {/* Display filtered news */}
         {filteredNews.map((item) => (
           <div key={item._id} className={styles['news-feed-card']}>
             <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
             <p className="text-sm opacity-70">{item.content}</p>
+            {/* Button to delete news */}
             <button onClick={() => handleDeleteNews(item._id)}>Delete</button>
           </div>
         ))}

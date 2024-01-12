@@ -1,60 +1,68 @@
+/* Responsive styles for screens with a maximum width of 768 pixels */
+
 @media (max-width: 768px) {
-    .message-input {
-      gap: 10px; /* Reduce gap for better spacing on phones */
-    }
-  
-    .avatar-button,
-    .close-button,
-    .message-textarea,
-    .send-button {
-      padding: 10px; /* Adjust padding for better touch interaction on phones */
-      border-radius: 4px; /* Smaller border-radius for a cleaner look on phones */
-    }
-  
-    .send-button {
-      padding: 10px 20px; /* Adjust padding for better touch interaction on phones */
-    }
-
-
+  /* Adjust spacing and padding for better display on phones */
+  .message-input {
+    gap: 10px; /* Reduce gap for better spacing on phones */
   }
+
+  /* Enhance touch interaction by adjusting padding and border-radius */
+  .avatar-button,
+  .close-button,
+  .message-textarea,
+  .send-button {
+    padding: 10px; /* Adjust padding for better touch interaction on phones */
+    border-radius: 4px; /* Smaller border-radius for a cleaner look on phones */
+  }
+
+  /* Further adjustment for send button's padding on phones */
+  .send-button {
+    padding: 10px 20px; /* Adjust padding for better touch interaction on phones */
+  }
+}
+
+/* Base styles for message input components */
 
 .message-input {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .avatar-button {
-    padding: 12px;
-    background-color: #5E2A86;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .close-button {
-    background-color: #7E57C2;
-    padding: 8.5px 20px;
-    border: none;
-    border-radius: 4px;
-    color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Spacing between child elements */
 }
-  
-  .message-textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #5E2A86;
-    border-radius: 6px;
-    box-sizing: border-box;
-  }
-  
-  .send-button {
-    padding: 12px 24px;
-    background-color: #7E57C2;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
+
+/* Styles for the avatar button */
+.avatar-button {
+  padding: 12px;
+  background-color: #5E2A86;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Styles for the close button */
+.close-button {
+  background-color: #7E57C2;
+  padding: 8.5px 20px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+}
+
+/* Styles for the message textarea */
+.message-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #5E2A86;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* Styles for the send button */
+.send-button {
+  padding: 12px 24px;
+  background-color: #7E57C2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

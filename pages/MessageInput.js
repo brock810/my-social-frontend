@@ -2,10 +2,24 @@
 
 import React, { useState } from 'react';
 import AvatarPicker from './AvatarPicker';
-import styles from '../styles/MessageInput.module.css'; 
+import styles from '../styles/MessageInput.module.css';
+
+/**
+ * MessageInput component handles user input for sending messages.
+ * @param {Object} props - The component props.
+ * @param {string} props.newMessage - The current message being typed.
+ * @param {function} props.setNewMessage - Function to update the message state.
+ * @param {function} props.sendMessage - Function to send the typed message.
+ * @param {function} props.setSelectedAvatar - Function to set the selected avatar.
+ * @returns {JSX.Element} - The rendered MessageInput component.
+ */
 const MessageInput = ({ newMessage, setNewMessage, sendMessage, setSelectedAvatar }) => {
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
+  /**
+   * Handles avatar selection from the AvatarPicker component.
+   * @param {string} avatar - The selected avatar.
+   */
   const handleAvatarSelect = (avatar) => {
     setSelectedAvatar(avatar);
     setShowAvatarPicker(false);
@@ -33,9 +47,10 @@ const MessageInput = ({ newMessage, setNewMessage, sendMessage, setSelectedAvata
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}
         placeholder="Type your message..."
-        className={styles['message-textarea']}  
+        className={styles['message-textarea']}
       />
-      <button onClick={sendMessage} className={styles['send-button']}>  {/* Add a class for styling the send button */}
+      <button onClick={sendMessage} className={styles['send-button']}>
+        {/* Button to send the typed message */}
         Send
       </button>
     </div>
