@@ -1,8 +1,6 @@
 @media (max-width: 768px) {
     .message-container {
-        padding: 10px;
-        width: 100%;
-        box-sizing: border-box;
+        width: 100%;       
     }
 
     .message-card {
