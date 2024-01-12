@@ -1,51 +1,92 @@
 @media (max-width: 768px) {
-
     .message-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        width: auto;
-        min-height: 100vh;
-        box-sizing: border-box;
+        font-size: 14px;
+        padding: 10px;
     }
 
     .message-card {
-        width: 100%; /* Adjust for smaller screens */
-        max-width: 100%;
+        width: 100%;
+        max-width: 70%; /* Adjust as needed */
+        padding: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .message-card h2 {
-        font-size: 1.5rem; /* Adjust heading font size for phones */
+        font-size: 1.2rem;
     }
 
     .message-card p {
-        font-size: 1rem; /* Adjust paragraph font size for phones */
+        font-size: 0.9rem;
     }
 
     .message-card button {
-        padding: 10px; 
+        padding: 8px;
     }
 
     .message-input textarea {
-        padding: 10px; /* Adjust padding for better touch interaction on phones */
+        padding: 8px;
     }
 
     .message-input button {
-        padding: 10px 20px; /* Adjust padding for better touch interaction on phones */
-    }
-
-    .chat-bubble {
-        max-width: 100%; /* Adjust for smaller screens */
-        width: 100%;
+        padding: 8px 16px;
     }
 
     .user-avatar {
-        width: 50px; /* Adjust avatar size for phones */
-        height: 50px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .message-list {
+        max-height: 200px;
+    }
+
+    .message-input textarea {
+        margin-bottom: 10px;
+        padding: 8px;
+    }
+
+    .message-input button {
+        padding: 8px 16px;
+    }
+
+    .chat-bubble {
+        max-width: 90%;
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .delete-button {
+        padding: 6.5px 16px;
+    }
+
+    .avatar-button,
+    .close-button,
+    .message-textarea,
+    .send-button {
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    .send-button {
+        padding: 8px 16px;
+    }
+
+    .avatar,
+    .selected-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .avatar-picker {
+        gap: 8px;
     }
 }
+
 
 .message-container {
     display: flex;
