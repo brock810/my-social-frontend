@@ -6,11 +6,14 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
+        width: auto;
         min-height: 100vh;
+        box-sizing: border-box;
     }
 
     .message-card {
         width: 100%; /* Adjust for smaller screens */
+        max-width: 100%;
     }
 
     .message-card h2 {
