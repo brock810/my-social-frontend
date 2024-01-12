@@ -1,12 +1,13 @@
 @media (max-width: 768px) {
     .message-container {
-        font-size: 14px;
         padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .message-card {
         width: 100%;
-        max-width: 70%; /* Adjust as needed */
+        max-width: 100%;
         padding: 10px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -38,6 +39,7 @@
 
     .message-list {
         max-height: 200px;
+        overflow-y: auto;
     }
 
     .message-input textarea {
@@ -50,7 +52,7 @@
     }
 
     .chat-bubble {
-        max-width: 90%;
+        max-width: 100%;
         padding: 8px;
         margin-bottom: 8px;
     }
@@ -86,6 +88,7 @@
         gap: 8px;
     }
 }
+
 
 
 .message-container {
