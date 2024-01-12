@@ -99,7 +99,7 @@ const NewsFeedPage = () => {
   return (
     <div className={`${styles['news-feed-container']} ${styles['global-body']}`}>
       <div className={styles['news-feed-header']}>
-        <h1 className="text-4xl font-bold mb-4">Add your name with some news about yourself!</h1>
+        <h1 className="text-4xl font-bold mb-4">Add some recent news about yourself!</h1>
       </div>
 
       <div className={styles['news-feed-form']}>

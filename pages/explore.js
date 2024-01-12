@@ -96,7 +96,7 @@ const ExplorePage = () => {
     <div className={styles['explore-container']}>
       <div className={styles['explore-header']}>
         <h1 className="text-4xl font-bold mb-4">Exploring Social Media</h1>
-        <p className="text-lg opacity-80">Add any social media to get your name out there!</p>
+        <p className="text-lg opacity-80">Add any social media for me to see!</p>
       </div>
 
       <div className={styles['social-media-links']}>

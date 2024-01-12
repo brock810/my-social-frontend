@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Friends.module.css';
-import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
 
 const AnimatedText = ({ text }) => {
   const [animatedText, setAnimatedText] = useState('');
@@ -26,23 +24,6 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   const [friendName, setFriendName] = useState('');
   const [userId, setUserId] = useState('');
   const [friendsList, setFriendsList] = useState(initialFriendsList || []);
-  useEffect(() => {
-    // Your Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDHrEAMI-qUlUYcW4NEHPym1zrRYj3r_Qo",
-      authDomain: "social810-24197.firebaseapp.com",
-      projectId: "social810-24197",
-      storageBucket: "social810-24197.appspot.com",
-      messagingSenderId: "1001683085546",
-      appId: "1:1001683085546:web:c07f95ce77db7e6e368f93",
-      measurementId: "G-8R9ZFVP20G"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  }, []);
-
 
   const FiraCodeFontLink = (
     <link
@@ -172,7 +153,7 @@ const FriendsPage = ({ friendsList: initialFriendsList }) => {
   return (
     <div className={styles['friends-container']}>
       <div className={styles['friends-header']}>
-        <AnimatedText text="Add yourself to my friends list and connect with friends to grow your network! " />
+        <AnimatedText text="Add yourself to my friends list and Mongo database!"/>
         
       </div>
 
