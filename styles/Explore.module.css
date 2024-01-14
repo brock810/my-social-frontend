@@ -205,7 +205,3 @@
   transition: transform 0.5s ease;
 }
 
-/* 3D rotation on media link item hover */
-.media-link-item:hover {
-  transform: rotateY(180deg);
-}
