@@ -12,7 +12,7 @@ const MessageItem = ({ message, deleteMessage, formatTimestamp, selectedAvatar }
   <li key={message._id} className={styles['chat-bubble']}>
     <div className={styles['avatar-container']}>
       {/* Display the selectedAvatar prop */}
-      <img src={selectedAvatar} alt="User Avatar" className={styles['user-avatar']} />
+      <AvatarPicker selectedAvatar={selectedAvatar} className={styles['user-avatar']} />
     </div>
     <div className={styles['message-content']}>
       <span className={styles['message-sender']}>{message.sender}: </span>
@@ -61,6 +61,9 @@ const Message = () => {
   const [selectedAvatar, setSelectedAvatar] = useState(
     isBrowser ? (localStorage.getItem('selectedAvatar') || '😻') : '🐱'
   );
+  
+  
+  
 
   // Initialize socket connection to the server
   const socket = io('https://noble-slow-dragon.glitch.me');
@@ -182,6 +185,11 @@ const Message = () => {
 
         setMessages(updatedMessages);
         saveMessagesToLocalStorage(updatedMessages);
+
+        // Emit a message to the WebSocket server about the deleted message
+        if (socket) {
+          socket.emit('message', { type: 'delete_message', messageId: id });
+        }
       } else {
         // Handle the case where result.success is not true
         console.error('Error deleting message:', result.error);
@@ -189,12 +197,6 @@ const Message = () => {
     } catch (error) {
       console.error('Error deleting message:', error);
     }
-  };
-
-  // Function to handle avatar selection
-  const handleAvatarSelect = (avatar) => {
-    setSelectedAvatar(avatar);
-    localStorage.setItem('selectedAvatar', avatar);
   };
 
   return (
@@ -220,8 +222,6 @@ const Message = () => {
             setSelectedAvatar={setSelectedAvatar}
           />
         </div>
-        {/* Render the AvatarPicker component */}
-        <AvatarPicker onSelect={handleAvatarSelect} />
       </div>
     </div>
   );
