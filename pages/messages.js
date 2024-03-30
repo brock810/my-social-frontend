@@ -59,8 +59,9 @@ const Message = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(
-    isBrowser ? localStorage.getItem('selectedAvatar') || 'https://placekitten.com/40/40' : 'https://placekitten.com/40/40'
+    isBrowser ? localStorage.getItem('selectedAvatar') || avatars[Math.floor(Math.random() * avatars.length)] : avatars[Math.floor(Math.random() * avatars.length)]
   );
+  
 
   // Initialize socket connection to the server
   const socket = io('https://noble-slow-dragon.glitch.me');
@@ -190,7 +191,6 @@ const Message = () => {
       } else {
         // Handle the case where result.success is not true
         console.error('Error deleting message:', result.error);
-        // You might want to show an error message or handle it in some way
       }
     } catch (error) {
       console.error('Error deleting message:', error);
