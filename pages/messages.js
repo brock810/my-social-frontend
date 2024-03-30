@@ -8,12 +8,8 @@ import io from 'socket.io-client';
 const isBrowser = typeof window !== 'undefined';
 
 // Individual message item component
-const MessageItem = ({ message, deleteMessage, formatTimestamp, selectedAvatar }) => (
+const MessageItem = ({ message, deleteMessage, formatTimestamp }) => (
   <li key={message._id} className={styles['chat-bubble']}>
-    <div className={styles['avatar-container']}>
-      {/* Display the selectedAvatar prop */}
-      <img src={selectedAvatar} alt="User Avatar" className={styles['user-avatar']} />
-    </div>
     <div className={styles['message-content']}>
       <span className={styles['message-sender']}>{message.sender}: </span>
       {/* Conditional rendering based on message deletion */}
