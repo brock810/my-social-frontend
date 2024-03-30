@@ -12,33 +12,6 @@ const NewsFeedPage = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Function to fetch news from the backend
-  const fetchNews = async () => {
-    try {
-      // Retrieve stored news from local storage
-      const storedNews = JSON.parse(localStorage.getItem('news')) || [];
-      setNews(storedNews);
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      const result = await response.json();
-  
-      console.log('Fetch News Response:', result);
-  
-      if (result.news) {
-        // Update state with the fetched news and save to local storage
-        setNews(result.news);
-        localStorage.setItem('news', JSON.stringify(result.news));
-      } else {
-        throw new Error(result.error || 'Internal Server Error');
-      }
-    } catch (error) {
-      console.error('Error fetching news from backend', error);
-      setError(error.message || 'An error occurred while fetching news');
-    }
-  };
 
   // Function to handle adding news
   const handleAddNews = async () => {
