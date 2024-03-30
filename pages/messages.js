@@ -59,8 +59,10 @@ const Message = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(
-    isBrowser ? localStorage.getItem('selectedAvatar') || avatars[Math.floor(Math.random() * avatars.length)] : avatars[Math.floor(Math.random() * avatars.length)]
+    isBrowser ? (localStorage.getItem('selectedAvatar') || '😻') : '🐱'
   );
+  
+  
   
 
   // Initialize socket connection to the server
