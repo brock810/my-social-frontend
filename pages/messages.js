@@ -12,7 +12,7 @@ const MessageItem = ({ message, deleteMessage, formatTimestamp, selectedAvatar }
   <li key={message._id} className={styles['chat-bubble']}>
     <div className={styles['avatar-container']}>
       {/* Display the selectedAvatar prop */}
-      <AvatarPicker selectedAvatar={selectedAvatar} className={styles['user-avatar']} />
+      <img src={selectedAvatar} alt="User Avatar" className={styles['user-avatar']} />
     </div>
     <div className={styles['message-content']}>
       <span className={styles['message-sender']}>{message.sender}: </span>

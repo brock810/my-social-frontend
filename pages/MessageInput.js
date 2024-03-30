@@ -10,10 +10,11 @@ import styles from '../styles/MessageInput.module.css';
  * @param {string} props.newMessage - The current message being typed.
  * @param {function} props.setNewMessage - Function to update the message state.
  * @param {function} props.sendMessage - Function to send the typed message.
+ * @param {string} props.selectedAvatar - The selected avatar.
  * @param {function} props.setSelectedAvatar - Function to set the selected avatar.
  * @returns {JSX.Element} - The rendered MessageInput component.
  */
-const MessageInput = ({ newMessage, setNewMessage, sendMessage, setSelectedAvatar }) => {
+const MessageInput = ({ newMessage, setNewMessage, sendMessage, selectedAvatar, setSelectedAvatar }) => {
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
 
   /**
@@ -27,6 +28,9 @@ const MessageInput = ({ newMessage, setNewMessage, sendMessage, setSelectedAvata
 
   return (
     <div className={styles['message-input']}>
+      {/* Display selected avatar beside the message input area */}
+      <div className={styles['selected-avatar']}>{selectedAvatar}</div>
+
       {!showAvatarPicker && (
         <button onClick={() => setShowAvatarPicker(true)} className={styles['avatar-button']}>
           Choose Your Avatar
