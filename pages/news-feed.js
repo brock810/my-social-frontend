@@ -19,9 +19,6 @@ const NewsFeedPage = () => {
       const storedNews = JSON.parse(localStorage.getItem('news')) || [];
       setNews(storedNews);
   
-      // Fetch news from the backend API
-      const response = await fetch('https://noble-slow-dragon.glitch.me/api/getNews');
-      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
