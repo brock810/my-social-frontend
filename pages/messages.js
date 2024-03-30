@@ -9,9 +9,9 @@ const isBrowser = typeof window !== 'undefined';
 
 const MessageItem = ({ message, deleteMessage, formatTimestamp, selectedAvatar }) => (
   <li key={message._id} className={styles['chat-bubble']}>
-    {/* Display the selectedAvatar beside the message */}
+    {/* Display the selectedAvatar emoji beside the message */}
     <div className={styles['avatar-container']}>
-      <img src={selectedAvatar} alt="User Avatar" className={styles['user-avatar']} />
+      {selectedAvatar} {/* Render the selected emoji */}
     </div>
     <div className={styles['message-content']}>
       <span className={styles['message-sender']}>{message.sender}: </span>
