@@ -25,11 +25,8 @@
 
 .message-input {
   display: flex;
-  align-items: flex-start; /* Align items to the start (left side) */
-}
-
-.selected-avatar {
-  margin-right: 10px; /* Add margin to create space between the avatar and message input */
+  flex-direction: column;
+  gap: 16px; /* Spacing between child elements */
 }
 
 /* Styles for the avatar button */
