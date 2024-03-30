@@ -1,9 +1,6 @@
-// NewsFeedPage.js
-
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/Newsfeed.module.css';
 
-// NewsFeedPage component
 const NewsFeedPage = () => {
   // State variables
   const [news, setNews] = useState([]);
@@ -11,7 +8,6 @@ const NewsFeedPage = () => {
   const [newContent, setNewContent] = useState('');
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-
 
   // Function to handle adding news
   const handleAddNews = async () => {
@@ -72,11 +68,6 @@ const NewsFeedPage = () => {
       setError(error.message || 'An error occurred while deleting news');
     }
   };
-
-  // Effect hook to fetch news on component mount
-  useEffect(() => {
-    fetchNews();
-  }, []);
 
   // Filtered news based on search term
   const filteredNews = news.filter(
