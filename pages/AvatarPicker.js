@@ -4,11 +4,10 @@ import React from 'react';
 import styles from '../styles/MessageInput.module.css';
 import Image from 'next/image';
 
-// List of cat avatars to choose from
 const avatars = [
-  'https://placekitten.com/40/40',
-  'https://placekitten.com/41/41',
-  'https://placekitten.com/42/42',
+  '😺', // Emoji for cat face
+  '🐱', // Emoji for cat
+  '😻', // Emoji for smiling cat with heart-eyes
 ];
 
 /**
@@ -20,7 +19,7 @@ const avatars = [
 const AvatarPicker = ({ onSelect }) => {
   return (
     <div className={styles['avatar-picker']}>
-      <p>Pick a cat!</p>
+      <p>Pick an avatar!</p>
       <div className={styles['avatar-list']}>
         {avatars.map((avatar, index) => (
           // Each cat avatar displayed as an Image component
